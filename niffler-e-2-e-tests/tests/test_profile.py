@@ -4,37 +4,29 @@ from playwright.sync_api import expect
 from pages.profile_page import ProfilePage
 from faker import Faker
 from config import TestUsers
+from marks import Pages
 
 fake = Faker("ru_RU")
 fake_category = fake.word()
 
 username  = 'Test User 5'
 
-
-def test_user_profile(auth):
-    page = auth
+@Pages.main_page
+def test_user_profile(page, app_user):
+    username, password = app_user
     user_icon = page.locator('[data-testid="PersonIcon"]')
     expect(user_icon).to_be_visible()
     user_icon.click()
     profile_btn = page.locator('a[href="/profile"]')
     expect(profile_btn).to_be_visible()
     profile_btn.click()
-    username = page.locator('#username')
-    expect(username).to_be_visible()
-    expect(username).to_have_value(TestUsers.USER_2["username"])
+    username_input = page.locator("//*[@id='username']")
+    expect(username_input).to_be_visible()
+    expect(username_input).to_have_value(username)
     expect(page)
 
-def test_add_name(auth, page):
-    profile_page = ProfilePage(auth)
-    profile_page.go_to_profile()
-
-    fake_name = fake.name()
-
-
-    test_data = "Тестовая категория"
-
-    username_value = page.locator('[name="username"]')
-    expect(username_value).to_have_value(TestUsers.USER_2["username"])
+@Pages.profile_page
+def test_add_name(page):
 
     name_input = page.locator('[name="name"]')
     expect(name_input).to_be_visible()
@@ -48,12 +40,8 @@ def test_add_name(auth, page):
     success_alert = page.get_by_test_id("SuccessOutlinedIcon")
     expect(success_alert).to_be_visible()
 
-def test_delete_added_name(auth, page):
-    profile_page = ProfilePage(auth)
-    profile_page.go_to_profile()
-
-    username_value = page.locator('[name="username"]')
-    expect(username_value).to_have_value(TestUsers.USER_2["username"])
+@Pages.profile_page
+def test_delete_added_name(page):
 
     name_input = page.locator('[name="name"]')
     expect(name_input).to_be_visible()
@@ -80,13 +68,8 @@ def test_delete_added_name(auth, page):
 
 
 
-
-def test_add_new_category(auth, page):
-
-    # fake_category = fake.word()
-
-    profile_page = ProfilePage(auth)
-    profile_page.go_to_profile()
+@Pages.profile_page
+def test_add_new_category(page):
 
     category_input = page.locator('[name="category"]')
     category_input.fill(fake_category)
@@ -99,10 +82,8 @@ def test_add_new_category(auth, page):
 
     expect(category_block).to_be_visible()
 
-def test_archive_category(auth, page):
-
-    profile_page = ProfilePage(auth)
-    profile_page.go_to_profile()
+@Pages.profile_page
+def test_archive_category(page):
 
     category_input = page.locator('[name="category"]')
     category_input.fill(fake_category)

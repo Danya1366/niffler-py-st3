@@ -14,6 +14,17 @@ def test_page_title(page:Page):
     page.goto(URLs.auth_URl + URLs.login)
     expect(page.locator('.header')).to_contain_text("Log in")
 
+def test_1(page, frontend_url, app_user):
+    username, password = app_user
+    page.goto(frontend_url)
+    page.get_by_placeholder('Type your username').fill(username)
+    page.get_by_placeholder('Type your password').fill(password)
+    page.locator('.form__submit').click()
+    expect(page).to_have_url('http://frontend.niffler.dc/main')
+    expect(page.get_by_text("History of Spendings")).to_be_visible()
+
+
+
 def test_create_new_user(page):
     page.goto(URLs.auth_URl + URLs.login)
     form_register = page.locator('.form__register')

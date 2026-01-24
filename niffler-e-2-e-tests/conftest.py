@@ -1,21 +1,101 @@
+import os
+from urllib.parse import urljoin
+
 import pytest
+
+from clients.spends_client import SpendsHttpClient
 from pages.login_page import LoginPage
 from config import TestUsers, URLs
+from dotenv import load_dotenv
+
+
 
 TEST_USER = "Test User 5"
 TEST_PASSWORD = "123321"
 EXPECTED_URL_AFTER_LOGIN = "http://frontend.niffler.dc/main"
 
 
-@pytest.fixture
-def auth(page):
-    login_page = LoginPage(page)
-    login_page.navigate_to_login().verify_form_visible()
-    login_page.login(TestUsers.USER_2["username"], TestUsers.USER_2["password"])
+@pytest.fixture(scope="session")
+def envs():
+    load_dotenv()
 
-    page.wait_for_url(URLs.base_URL + URLs.main, timeout=10000)
+@pytest.fixture(scope="session")
+def frontend_url(envs):
+    return os.getenv("FRONTEND_URL")
 
-    return page
+
+@pytest.fixture(scope="session")
+def gateway_url(envs):
+    return os.getenv("GATEWAY_URL")
+
+@pytest.fixture(scope="session")
+def app_user(envs):
+    return os.getenv("TEST_USERNAME"), os.getenv("TEST_PASSWORD")
+
+
+
+
+
+
+# @pytest.fixture
+# def spends_client(app_user_token):  # ← новая фикстура, возвращающая токен
+#     return SpendsHttpClient(
+#         base_url="http://gateway.niffler.dc:8090",
+#         token=app_user_token
+#     )
+# # @pytest.fixture
+# # def app_user_token(app_user):
+# #     username, password = app_user
+# #     # Выполните логин через /login или /oauth/token и получите JWT
+# #     # Например, через requests или специальный auth-клиент
+# #     token = authenticate_and_get_token(username, password)
+# #     return token
+
+@pytest.fixture()
+def spends_client(gateway_url, auth) -> SpendsHttpClient:
+    return SpendsHttpClient(gateway_url, auth)
+
+@pytest.fixture(params=[])
+def category(request, spends_client):
+    category_name = request.param
+    current_categories = spends_client.get_categories()
+    category_names = [name["name"] for name in current_categories]
+    if category_name not in category_names:
+        spends_client.add_category(category_name)
+    return category_name
+
+
+
+@pytest.fixture(scope="function")
+def auth(page, frontend_url, app_user):
+    username, password = app_user
+    page.goto(frontend_url)
+    page.get_by_placeholder('Type your username').fill(username)
+    page.get_by_placeholder('Type your password').fill(password)
+    page.locator('.form__submit').click()
+    page.wait_for_url(f"{frontend_url}/main")
+
+    token = page.evaluate("() => localStorage.getItem('id_token')")
+    return token
+
+@pytest.fixture(params=[])
+def spends(request, spends_client):
+    spend = spends_client.add_spends(request.param)
+    yield spend
+    try:
+        # TODO вместо исключения првоерить список текущих spends
+        spends_client.remove_spends([spend["id"]])
+    except Exception:
+        pass
+
+@pytest.fixture()
+def main_page(page, auth, frontend_url):
+    page.goto(frontend_url)
+
+@pytest.fixture()
+def profile_page(page, auth, frontend_url):
+    profile_url = urljoin(frontend_url, "/profile")
+    page.goto(profile_url)
 
 
 
