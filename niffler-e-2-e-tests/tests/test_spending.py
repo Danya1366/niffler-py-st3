@@ -1,24 +1,21 @@
 from time import sleep
 
+from click import pause
 from playwright.sync_api import expect
+
+from marks import Pages
 from pages.profile_page import ProfilePage
 from faker import Faker
 from datetime import datetime, timedelta
 
 fake = Faker("ru_RU")
 fake_category = fake.word()
+count = 100
+category_name = "new category"
+description = "вчерашние траты"
 
-def test_new_spending(auth,page):
-
-    count = 100
-    category_name = "new category"
-    description = "вчерашние траты"
-
-    page = auth
-    spending_link = page.locator('a[href="/spending"]')
-    expect(spending_link).to_be_visible()
-
-    spending_link.click()
+@Pages.spending_page
+def test_new_spending(page):
 
     expect(page).to_have_url('http://frontend.niffler.dc/spending')
     amount_input = page.locator('input[name="amount"]')
@@ -38,8 +35,7 @@ def test_new_spending(auth,page):
 
     yesterday = datetime.now() - timedelta(days=1)
     yesterday_day = yesterday.day
-
-    page.locator(f'text={yesterday_day}').first.click()
+    page.get_by_role("gridcell", name=str(yesterday_day), exact=True).click()
 
     # Добавляем описание трате
     description_input = page.locator('input[name="description"]')

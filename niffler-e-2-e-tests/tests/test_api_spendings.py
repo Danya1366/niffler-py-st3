@@ -8,6 +8,8 @@ from playwright.sync_api import Page,expect
 def test_spending_title_exists(page):
     expect(page).to_have_url('http://frontend.niffler.dc/')
     expect(page.get_by_text("History of Spendings")).to_be_visible()
+
+
 TEST_CATEGORY = "school"
 
 @Pages.main_page

@@ -2,6 +2,7 @@ import os
 from urllib.parse import urljoin
 
 import pytest
+from playwright.sync_api import expect
 
 from clients.spends_client import SpendsHttpClient
 from pages.login_page import LoginPage
@@ -74,6 +75,7 @@ def auth(page, frontend_url, app_user):
     page.get_by_placeholder('Type your password').fill(password)
     page.locator('.form__submit').click()
     page.wait_for_url(f"{frontend_url}/main")
+    expect(page.get_by_text("History of Spendings")).to_be_visible()
 
     token = page.evaluate("() => localStorage.getItem('id_token')")
     return token
@@ -83,7 +85,6 @@ def spends(request, spends_client):
     spend = spends_client.add_spends(request.param)
     yield spend
     try:
-        # TODO вместо исключения првоерить список текущих spends
         spends_client.remove_spends([spend["id"]])
     except Exception:
         pass
@@ -97,5 +98,9 @@ def profile_page(page, auth, frontend_url):
     profile_url = urljoin(frontend_url, "/profile")
     page.goto(profile_url)
 
+@pytest.fixture()
+def spending_page(page, auth, frontend_url):
+    spending_url = urljoin(frontend_url, "/spending")
+    page.goto(spending_url)
 
 
