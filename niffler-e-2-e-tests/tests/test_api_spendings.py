@@ -34,7 +34,8 @@ def test_spending_should_deleted(page, category, spends):
     page.get_by_role("checkbox", name="school", exact=True).check()
     page.locator("#delete").click()
     page.get_by_role("button", name="Delete").click()
-    expect(page.locator('[aria-labelledby="tableTitle"]')).not_to_contain_text('QA>GURU Python Advanced 6')
+    container_history_of_spending = page.locator('[id="spendings"]')
+    expect(container_history_of_spending).not_to_contain_text('QA>GURU Python Advanced 6')
 
 
 

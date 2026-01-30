@@ -4,11 +4,6 @@ import pytest
 from playwright.sync_api import Page,expect
 from config import TestUsers, URLs
 
-URL = "http://auth.niffler.dc:9000"
-login = "/login"
-
-username = 'Test User 5'
-
 
 def test_page_title(page:Page):
     page.goto(URLs.auth_URl + URLs.login)
@@ -22,6 +17,10 @@ def test_1(page, frontend_url, app_user):
     page.locator('.form__submit').click()
     expect(page).to_have_url('http://frontend.niffler.dc/main')
     expect(page.get_by_text("History of Spendings")).to_be_visible()
+
+def test_sign_up_passwords_dont_match():
+    pass
+
 
 
 
@@ -131,4 +130,7 @@ def test_no_values_auth(page):
     expect(btn_submit).to_be_visible()
 
     btn_submit.click()
+
+def test_logout():
+    pass
 
