@@ -1,6 +1,7 @@
 from urllib.parse import urljoin
 
 import requests
+from fastapi_pagination import response
 
 
 class SpendsHttpClient:
@@ -34,6 +35,12 @@ class SpendsHttpClient:
         print(f"Response body: {response.text}")
         response.raise_for_status()
         return response.json()
+
+    def get_spends(self):
+        url = urljoin(self.base_url, "/api/spends/all")
+        response = self.session.get(url)
+        response.raise_for_status()
+        return  response.json()
 
     def remove_spends(self, ids: list[int]):
         url = urljoin(self.base_url,"/api/spends/remove")
