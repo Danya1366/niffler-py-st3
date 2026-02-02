@@ -20,7 +20,17 @@ class RegisterPage:
         self.submit_btn = page.locator('.form__submit')
         self.sgn_in_btn = page.locator('.form_sign-in')
 
+    def password_input_fill(self, password: str):
+        self.password_input.click()
+        self.password_input.fill(password)
 
+    def username_input_fill(self, username: str):
+        self.username_input.click()
+        self.username_input.fill(username)
+
+    def password_submit_input_fill(self, password: str):
+        self.password_submit_input.click()
+        self.password_submit_input.fill(password)
     # def navigate_to_login(self):
     #     self.goto(self.URL)
     #     self.wait_for_load()

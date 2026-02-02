@@ -28,16 +28,13 @@ def test_1(page, frontend_url, app_user):
 def test_sign_up_passwords_dont_match(page, frontend_url):
     page.goto(frontend_url)
     page.locator('[href="/register"]').click()
-    username_input = page.locator('[id="username"]')
-    password_input = page.locator('[id="password"]')
-    password_submit_input = page.locator('[id="passwordSubmit"]')
-    username_input.click()
-    username_input.fill('Тестовый')
-    password_input.click()
-    password_input.fill('123321')
-    password_submit_input.click()
-    password_submit_input.fill('321123')
-    page.get_by_role("button", name="Sign Up").click()
+    register_page = RegisterPage(page)
+
+    register_page.username_input_fill('Тестовый')
+    register_page.password_input_fill('123321')
+    register_page.password_submit_input_fill('321123')
+    register_page.submit_btn.click()
+
     expect(page.locator('[class="form__error"]')).to_contain_text('Passwords should be equal')
 
 
