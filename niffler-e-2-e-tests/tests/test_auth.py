@@ -1,62 +1,84 @@
 from time import sleep
 
 import pytest
-from playwright.sync_api import Page,expect
+from playwright.sync_api import Page, expect
 from config import TestUsers, URLs
+from conftest import app_user, spending_page
+from marks import Pages
+from pages.login_page import LoginPage, RegisterPage
+from faker import Faker
 
 
-def test_page_title(page:Page):
-    page.goto(URLs.auth_URl + URLs.login)
+def test_page_title(page, frontend_url):
+    page.goto(frontend_url)
     expect(page.locator('.header')).to_contain_text("Log in")
+
 
 def test_1(page, frontend_url, app_user):
     username, password = app_user
     page.goto(frontend_url)
-    page.get_by_placeholder('Type your username').fill(username)
-    page.get_by_placeholder('Type your password').fill(password)
-    page.locator('.form__submit').click()
+    login_page = LoginPage(page)
+    login_page.username_input.fill(username)
+    login_page.password_input.fill(password)
+    login_page.btn_submit.click()
     expect(page).to_have_url('http://frontend.niffler.dc/main')
     expect(page.get_by_text("History of Spendings")).to_be_visible()
 
-def test_sign_up_passwords_dont_match():
-    pass
+
+def test_sign_up_passwords_dont_match(page, frontend_url):
+    page.goto(frontend_url)
+    page.locator('[href="/register"]').click()
+    username_input = page.locator('[id="username"]')
+    password_input = page.locator('[id="password"]')
+    password_submit_input = page.locator('[id="passwordSubmit"]')
+    username_input.click()
+    username_input.fill('Тестовый')
+    password_input.click()
+    password_input.fill('123321')
+    password_submit_input.click()
+    password_submit_input.fill('321123')
+    page.get_by_role("button", name="Sign Up").click()
+    expect(page.locator('[class="form__error"]')).to_contain_text('Passwords should be equal')
 
 
+def test_create_new_user(page, frontend_url):
+    fake = Faker()
+    fake_username = fake.name()
+    fake_password = fake.password()
+    page.goto(frontend_url)
+
+    register_form = page.locator('[href="/register"]')
+    expect(register_form).to_be_visible()
+    expect(register_form).to_contain_text('Create new account')
+    register_form.click()
+    expect(page).to_have_url(URLs.auth_URl + URLs.register)
+
+    register_page = RegisterPage(page)
+
+    expect(register_page.username_input).to_be_visible()
+    expect(register_page.password_input).to_be_visible()
+    expect(register_page.password_submit_input).to_be_visible()
+
+    register_page.username_input.fill(fake_username)
+    register_page.password_input.fill(fake_password)
+    register_page.password_submit_input.fill(fake_password)
+    register_page.submit_btn.click()
+
+    expect(page.locator('.form__paragraph_success')).to_be_visible()
+    expect(register_page.sgn_in_btn).to_be_visible()
+
+    register_page.sgn_in_btn.click()
+
+    login_page = LoginPage(page)
+    login_page.username_input.fill(fake_username)
+    login_page.password_input.fill(fake_password)
+    login_page.btn_submit.click()
+    expect(page).to_have_url('http://frontend.niffler.dc/main')
+    expect(page.get_by_text("History of Spendings")).to_be_visible()
 
 
-# def test_create_new_user(page):
-#     page.goto(URLs.auth_URl + URLs.login)
-#     form_register = page.locator('.form__register')
-#     expect(form_register).to_be_visible()
-#     expect(form_register).to_contain_text('Create new account')
-#     form_register.click()
-#     expect(page).to_have_url(URLs.auth_URl + URLs.register)
-#
-#     input_form_password = page.locator('#password')
-#     input_form_username = page.locator('input[name="username"]')
-#     input_form_password_submit = page.locator('#passwordSubmit')
-#
-#     expect(input_form_password).to_be_visible()
-#     expect(input_form_username).to_be_visible()
-#     expect(input_form_password_submit).to_be_visible()
-#
-#     input_form_username.fill(TestUsers.USER_2['username'])
-#     input_form_password.fill(TestUsers.USER_2["password"])
-#     input_form_password_submit.fill(TestUsers.USER_2["password"])
-#
-#     page.locator('.form__submit').click()
-#
-#     btn_sgn_in = page.locator('.form_sign-in')
-#
-#     expect(page.locator('.form__paragraph_success')).to_be_visible()
-#     expect(btn_sgn_in).to_be_visible()
-#
-#     btn_sgn_in.click()
-#
-#     expect(form_register).to_be_visible()
-
-
-def test_valid_auth(page):
+def test_valid_auth(page, app_user):
+    username, userpassword = app_user
     page.goto("http://auth.niffler.dc:9000/login")
 
     form_username = page.get_by_placeholder('Type your username')
@@ -65,18 +87,12 @@ def test_valid_auth(page):
     expect(form_password).to_be_visible()
     expect(form_username).to_be_visible()
 
-    form_username.fill(TestUsers.USER_2['username'])
-    form_password.fill(TestUsers.USER_2['password'])
-
+    form_username.fill(username)
+    form_password.fill(userpassword)
     btn_submit = page.locator('.form__submit')
-
     expect(btn_submit).to_be_visible()
-
     btn_submit.click()
-
     expect(page).to_have_url('http://frontend.niffler.dc/main')
-
-    sleep(3)
 
 
 def test_invalid_username_auth(page):
@@ -98,6 +114,7 @@ def test_invalid_username_auth(page):
     msg_error = page.locator('.form__error')
     expect(msg_error).to_be_visible()
 
+
 def test_invalid_password_auth(page):
     page.goto(URLs.auth_URl + URLs.login)
     form_username = page.get_by_placeholder('Type your username')
@@ -117,6 +134,7 @@ def test_invalid_password_auth(page):
     msg_error = page.locator('.form__error')
     expect(msg_error).to_be_visible()
 
+
 def test_no_values_auth(page):
     page.goto(URLs.auth_URl + URLs.login)
     form_username = page.get_by_placeholder('Type your username')
@@ -131,6 +149,11 @@ def test_no_values_auth(page):
 
     btn_submit.click()
 
-def test_logout():
-    pass
 
+@Pages.main_page
+def test_logout(page):
+    page.locator('[aria-label="Menu"]').click()
+    page.get_by_role("menuitem", name="Sign out").click()
+    page.get_by_role('button', name="Log out").click()
+    expect(page).to_have_url('http://auth.niffler.dc:9000/login')
+    pass
