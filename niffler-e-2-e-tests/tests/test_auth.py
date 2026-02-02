@@ -1,9 +1,5 @@
-from time import sleep
-
-import pytest
-from playwright.sync_api import Page, expect
-from config import TestUsers, URLs
-from conftest import app_user, spending_page
+from playwright.sync_api import expect
+from conftest import app_user
 from marks import Pages
 from pages.login_page import LoginPage, RegisterPage
 from faker import Faker
@@ -48,7 +44,7 @@ def test_create_new_user(page, frontend_url):
     expect(register_form).to_be_visible()
     expect(register_form).to_contain_text('Create new account')
     register_form.click()
-    expect(page).to_have_url(URLs.auth_URl + URLs.register)
+    expect(page).to_have_url('http://auth.niffler.dc:9000/register')
 
     register_page = RegisterPage(page)
 
@@ -93,15 +89,18 @@ def test_valid_auth(page, app_user):
 
 
 def test_invalid_username_auth(page):
-    page.goto(URLs.auth_URl + URLs.login)
+
+    invalid_username = 'Invalid username'
+    invalid_password = '12345678'
+    page.goto('http://auth.niffler.dc:9000/login')
     form_username = page.get_by_placeholder('Type your username')
     form_password = page.get_by_placeholder('Type your password')
 
     expect(form_password).to_be_visible()
     expect(form_username).to_be_visible()
 
-    form_username.fill(TestUsers.INVALID_USER["username"])
-    form_password.fill(TestUsers.INVALID_USER["password"])
+    form_username.fill(invalid_username)
+    form_password.fill(invalid_password)
 
     btn_submit = page.locator('.form__submit')
 
@@ -112,16 +111,20 @@ def test_invalid_username_auth(page):
     expect(msg_error).to_be_visible()
 
 
-def test_invalid_password_auth(page):
-    page.goto(URLs.auth_URl + URLs.login)
+def test_invalid_password_auth(page, app_user):
+
+    username, password = app_user
+    invalid_password = '12345678'
+
+    page.goto('http://auth.niffler.dc:9000/login')
     form_username = page.get_by_placeholder('Type your username')
     form_password = page.get_by_placeholder('Type your password')
 
     expect(form_password).to_be_visible()
     expect(form_username).to_be_visible()
 
-    form_username.fill(TestUsers.USER_2["username"])
-    form_password.fill(TestUsers.INVALID_USER["password"])
+    form_username.fill(username)
+    form_password.fill(invalid_password)
 
     btn_submit = page.locator('.form__submit')
 
@@ -133,7 +136,8 @@ def test_invalid_password_auth(page):
 
 
 def test_no_values_auth(page):
-    page.goto(URLs.auth_URl + URLs.login)
+    page.goto('http://auth.niffler.dc:9000/login')
+
     form_username = page.get_by_placeholder('Type your username')
     form_password = page.get_by_placeholder('Type your password')
 

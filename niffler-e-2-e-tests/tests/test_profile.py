@@ -1,9 +1,5 @@
-from time import sleep
-
 from playwright.sync_api import expect
-from pages.profile_page import ProfilePage
 from faker import Faker
-from config import TestUsers
 from marks import Pages
 
 fake = Faker("ru_RU")

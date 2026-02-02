@@ -5,8 +5,6 @@ import pytest
 from playwright.sync_api import expect
 
 from clients.spends_client import SpendsHttpClient
-from pages.login_page import LoginPage
-from config import TestUsers, URLs
 from dotenv import load_dotenv
 
 
@@ -32,25 +30,6 @@ def gateway_url(envs):
 @pytest.fixture(scope="session")
 def app_user(envs):
     return os.getenv("TEST_USERNAME"), os.getenv("TEST_PASSWORD")
-
-
-
-
-
-
-# @pytest.fixture
-# def spends_client(app_user_token):  # ← новая фикстура, возвращающая токен
-#     return SpendsHttpClient(
-#         base_url="http://gateway.niffler.dc:8090",
-#         token=app_user_token
-#     )
-# # @pytest.fixture
-# # def app_user_token(app_user):
-# #     username, password = app_user
-# #     # Выполните логин через /login или /oauth/token и получите JWT
-# #     # Например, через requests или специальный auth-клиент
-# #     token = authenticate_and_get_token(username, password)
-# #     return token
 
 @pytest.fixture()
 def spends_client(gateway_url, auth) -> SpendsHttpClient:

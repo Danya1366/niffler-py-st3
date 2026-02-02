@@ -1,17 +1,10 @@
-from time import sleep
-
-from click import pause
 from playwright.sync_api import expect
 
-from conftest import main_page
 from marks import Pages, TestData
-from pages.profile_page import ProfilePage
 from faker import Faker
-from datetime import datetime, timedelta
 
 from pages.spending_page import SpendingPage
 from pages.main_page import MainPage
-from tests.test_api_spendings import TEST_CATEGORY
 
 fake = Faker("ru_RU")
 fake_category = fake.word()
