@@ -1,10 +1,12 @@
 from playwright.sync_api import expect
 
+from conftest import main_page
 from marks import Pages, TestData
 from faker import Faker
 
 from pages.spending_page import SpendingPage
 from pages.main_page import MainPage
+from models.spend import SpendAdd, CategoryAdd
 
 fake = Faker("ru_RU")
 fake_category = fake.word()
@@ -14,7 +16,7 @@ description = "вчерашние траты"
 
 
 @Pages.spending_page
-def test_new_spending(page):
+def test_new_spending(page, spends_client, spend_db):
     spending_page = SpendingPage(page)
     expect(page).to_have_url('http://frontend.niffler.dc/spending')
     spending_page.add_amount(amount_to_add)
@@ -24,30 +26,30 @@ def test_new_spending(page):
     add_btn = page.locator('#save')
     add_btn.click()
     expect(page).to_have_url('http://frontend.niffler.dc/main')
+    main_page = MainPage(page)
+    main_page.remove_all_spends()
 
 
 TEST_CATEGORY_1 = "категория 1"
 TEST_CATEGORY_2 = "Категория 2"
 edited_amount = 200.03
-edited_category = 'Тестовая для проверки изменений'
 edited_description = 'Тест'
 
 
-@Pages.main_page
 @TestData.category(TEST_CATEGORY_1)
 @TestData.spends({
-    "amount": "108.51",
-    "description": "QA>GURU Python Advanced 6",
+    "amount": 101.1,
+    "description": "test_description",
     "category": {
         "name": TEST_CATEGORY_1
     },
-    "spendDate": "2024-08-08T18:39:27.955Z",
+    "spendDate": "2025-08-08T18:39:27.955Z",
     "currency": "RUB"
 })
-def test_update_spending(page, category, spends):
-    page.reload()
+def test_update_spending(page, category, spends, envs):
+    page.goto(envs.frontend_url)
     expect(page.locator('[aria-labelledby="tableTitle"]')).to_be_visible()
-    expect(page.locator('[aria-labelledby="tableTitle"]')).to_contain_text('QA>GURU Python Advanced 6')
+    expect(page.locator('[aria-labelledby="tableTitle"]')).to_contain_text('test_description')
     page.get_by_role("checkbox", name=TEST_CATEGORY_1).get_by_label("Edit spending").click()
     spending_page = SpendingPage(page)
     spending_page.amount_input_field.click()
@@ -55,15 +57,16 @@ def test_update_spending(page, category, spends):
     spending_page.amount_input_field.press('Backspace')
     spending_page.amount_input_field.fill(str(edited_amount))
     spending_page.category_input_field.click()
-    spending_page.category_input_field.fill(edited_category)
+    spending_page.category_input_field.fill(TEST_CATEGORY_1)
     spending_page.add_description(edited_description)
     spending_page.btn_save.click()
     expect(page).to_have_url('http://frontend.niffler.dc/main')
     statistics_icon = page.locator('[id="stat"]')
-    expect(statistics_icon).to_contain_text(f"{edited_category} {edited_amount} ₽")
+    expect(statistics_icon).to_contain_text(f"{TEST_CATEGORY_1} {edited_amount} ₽")
     expect(page.locator('[aria-labelledby="tableTitle"]')).to_contain_text(edited_description)
     expect(page.locator('[aria-labelledby="tableTitle"]')).to_contain_text(str(edited_amount))
-    expect(page.locator('[aria-labelledby="tableTitle"]')).to_contain_text(edited_category)
+    expect(page.locator('[aria-labelledby="tableTitle"]')).to_contain_text(TEST_CATEGORY_1)
+
 
 @Pages.main_page
 @TestData.category(TEST_CATEGORY_1)
@@ -76,9 +79,9 @@ def test_update_spending(page, category, spends):
     "spendDate": "2024-08-08T18:39:27.955Z",
     "currency": "RUB"
 })
-
-def test_delete_all_spendings(page, category, spends, spends_client):
-    spend2 = spends_client.add_spends({
+def test_delete_all_spendings(page, category, spends, spends_client, spend_db):
+    category = spends_client.add_category(CategoryAdd(name="QA_GURU"))
+    spends_client.add_spends({
         "amount": 200.01,
         "description": "Second Product",
         "category": {"name": "QA_GURU"},
@@ -91,9 +94,13 @@ def test_delete_all_spendings(page, category, spends, spends_client):
     main_page = MainPage(page)
     main_page.remove_all_spends()
     expect(container_history_of_spending).to_contain_text('There are no spendings')
+    spend_db.delete_category(category.id)
+
 
 amount2 = 99.99
 amount1 = 108.51
+
+
 @Pages.main_page
 @TestData.category(TEST_CATEGORY_1)
 @TestData.spends({
@@ -105,7 +112,6 @@ amount1 = 108.51
     "spendDate": "2024-08-08T18:39:27.955Z",
     "currency": "RUB"
 })
-
 def test_total_of_spend(page, category, spends):
     page.reload()
     main_page = MainPage(page)
