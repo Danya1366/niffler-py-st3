@@ -65,6 +65,7 @@ def test_update_spending(page, category, spends):
     expect(page.locator('[aria-labelledby="tableTitle"]')).to_contain_text(str(edited_amount))
     expect(page.locator('[aria-labelledby="tableTitle"]')).to_contain_text(edited_category)
 
+
 @Pages.main_page
 @TestData.category(TEST_CATEGORY_1)
 @TestData.spends({
@@ -76,7 +77,6 @@ def test_update_spending(page, category, spends):
     "spendDate": "2024-08-08T18:39:27.955Z",
     "currency": "RUB"
 })
-
 def test_delete_all_spendings(page, category, spends, spends_client):
     spend2 = spends_client.add_spends({
         "amount": 200.01,
@@ -92,8 +92,11 @@ def test_delete_all_spendings(page, category, spends, spends_client):
     main_page.remove_all_spends()
     expect(container_history_of_spending).to_contain_text('There are no spendings')
 
+
 amount2 = 99.99
 amount1 = 108.51
+
+
 @Pages.main_page
 @TestData.category(TEST_CATEGORY_1)
 @TestData.spends({
@@ -105,7 +108,6 @@ amount1 = 108.51
     "spendDate": "2024-08-08T18:39:27.955Z",
     "currency": "RUB"
 })
-
 def test_total_of_spend(page, category, spends):
     page.reload()
     main_page = MainPage(page)

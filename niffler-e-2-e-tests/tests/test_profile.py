@@ -5,7 +5,8 @@ from marks import Pages
 fake = Faker("ru_RU")
 fake_category = fake.word()
 
-username  = 'Test User 5'
+username = 'Test User 5'
+
 
 @Pages.main_page
 def test_user_profile(page, app_user):
@@ -21,9 +22,9 @@ def test_user_profile(page, app_user):
     expect(username_input).to_have_value(username)
     expect(page)
 
+
 @Pages.profile_page
 def test_add_name(page):
-
     name_input = page.locator('[name="name"]')
     expect(name_input).to_be_visible()
 
@@ -36,9 +37,9 @@ def test_add_name(page):
     success_alert = page.get_by_test_id("SuccessOutlinedIcon")
     expect(success_alert).to_be_visible()
 
+
 @Pages.profile_page
 def test_delete_added_name(page):
-
     name_input = page.locator('[name="name"]')
     expect(name_input).to_be_visible()
 
@@ -63,10 +64,8 @@ def test_delete_added_name(page):
     expect(name_input).to_have_value('')
 
 
-
 @Pages.profile_page
 def test_add_new_category(page):
-
     category_input = page.locator('[name="category"]')
     category_input.fill(fake_category)
     category_input.press("Enter")
@@ -78,9 +77,9 @@ def test_add_new_category(page):
 
     expect(category_block).to_be_visible()
 
+
 @Pages.profile_page
 def test_archive_category(page):
-
     category_input = page.locator('[name="category"]')
     category_input.fill(fake_category)
     category_input.press("Enter")
@@ -90,13 +89,13 @@ def test_archive_category(page):
     archive_button = category_block.get_by_label("Archive category")
     archive_button.click()
 
-    btn_archive = page.get_by_role('button', name = "Archive")
+    btn_archive = page.get_by_role('button', name="Archive")
 
     btn_archive.click()
 
     expect(category_block).not_to_be_visible()
 
-    archive_checkbox = page.get_by_role("checkbox", name = "Show archived")
+    archive_checkbox = page.get_by_role("checkbox", name="Show archived")
 
     archive_checkbox.click()
 
