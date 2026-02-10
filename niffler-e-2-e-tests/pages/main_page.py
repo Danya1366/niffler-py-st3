@@ -11,3 +11,4 @@ class MainPage:
         self.page.get_by_role("checkbox", name="select all rows").check()
         self.page.locator('[id="delete"]').click()
         self.page.get_by_role("button", name="Delete").click()
+        return self

@@ -21,11 +21,13 @@ class SpendingPage:
         self.amount_input_field.click()
         self.amount_input_field.press('Backspace')
         self.amount_input_field.fill(str(amount))
+        return self
 
     def add_category(self, category: str):
         self.category_input_field.wait_for(state="visible")
         self.category_input_field.click()
         self.category_input_field.fill(str(category))
+        return self
 
 
 
@@ -33,13 +35,16 @@ class SpendingPage:
         self.calendar_icon.wait_for(state="visible")
         self.calendar_icon.click()
         self.page.get_by_role("gridcell", name=str(self.yesterday_day), exact=True).click()
+        return self
 
     def add_description(self, description: str):
         self.calendar_icon.wait_for(state="visible")
         self.description_field.click()
         self.description_field.fill(str(description))
+        return self
 
     def save_change(self):
         self.btn_save.wait_for(state="visible")
         self.btn_save.click()
+        return self
 
