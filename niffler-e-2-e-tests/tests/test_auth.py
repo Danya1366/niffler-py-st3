@@ -89,7 +89,6 @@ def test_valid_auth(page, app_user):
 
 
 def test_invalid_username_auth(page):
-
     invalid_username = 'Invalid username'
     invalid_password = '12345678'
     page.goto('http://auth.niffler.dc:9000/login')
@@ -112,7 +111,6 @@ def test_invalid_username_auth(page):
 
 
 def test_invalid_password_auth(page, app_user):
-
     username, password = app_user
     invalid_password = '12345678'
 

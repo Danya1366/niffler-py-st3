@@ -1,7 +1,6 @@
 from playwright.sync_api import expect
 from marks import Pages, TestData
 
-
 TEST_CATEGORY_DB = "test_category_db"
 
 

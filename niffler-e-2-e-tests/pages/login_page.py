@@ -1,5 +1,6 @@
 from playwright.sync_api import expect, Page
 
+
 class LoginPage:
     def __init__(self, page: Page):
         self.page = page
@@ -19,7 +20,6 @@ class RegisterPage:
         self.password_submit_input = page.locator('[id="passwordSubmit"]')
         self.submit_btn = page.locator('.form__submit')
         self.sgn_in_btn = page.locator('.form_sign-in')
-
 
     def password_input_fill(self, password: str):
         self.password_input.click()
