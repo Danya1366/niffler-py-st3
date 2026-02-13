@@ -10,8 +10,8 @@ from models.config import Envs
 
 from clients.spends_client import SpendsHttpClient
 from dotenv import load_dotenv
-
-
+from pages.main_page import MainPage
+from pages.spending_page import SpendingPage
 
 TEST_USER = "Test User 5"
 TEST_PASSWORD = "123321"

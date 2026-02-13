@@ -1,32 +1,27 @@
+import pytest
+import requests
 from marks import Pages, TestData
 from playwright.sync_api import expect
 
-
-@Pages.main_page
-def test_spending_title_exists(page):
-    expect(page).to_have_url('http://frontend.niffler.dc/')
-    expect(page.get_by_text("History of Spendings")).to_be_visible()
-
+from pages.main_page import MainPage
 
 TEST_CATEGORY = "school"
 
-
+@Pages.main_page
 @TestData.category(TEST_CATEGORY)
 @TestData.spends({
-    "amount": 108.51,
-    "description": "test_description",
+    "amount": "108.51",
+    "description": "QA>GURU Python Advanced 6",
     "category": {
         "name": TEST_CATEGORY
     },
-    "spendDate": "2025-08-08T18:39:27.955Z",
+    "spendDate": "2024-08-08T18:39:27.955Z",
     "currency": "RUB"
 })
-def test_spending_should_deleted(page, category, spends, envs):
-    page.goto(envs.frontend_url)
-    expect(page.locator('[aria-labelledby="tableTitle"]')).to_be_visible()
-    expect(page.locator('[aria-labelledby="tableTitle"]')).to_contain_text('test_description')
-    page.get_by_role("checkbox", name="school", exact=True).check()
-    page.locator("#delete").click()
-    page.get_by_role("button", name="Delete").click()
-    container_history_of_spending = page.locator('[id="spendings"]')
-    expect(container_history_of_spending).not_to_contain_text('QA>GURU Python Advanced 6')
+def test_spending_should_be_deleted(page, category, spends):
+    page.reload()
+    main_page = MainPage(page)
+    expect(main_page.expense_table).to_be_visible()
+    expect(main_page.expense_table).to_contain_text('QA>GURU Python Advanced 6')
+    main_page.delete_spend(TEST_CATEGORY)
+    expect(main_page.container_history_of_spending).not_to_contain_text('QA>GURU Python Advanced 6')
