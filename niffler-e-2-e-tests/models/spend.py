@@ -1,6 +1,3 @@
-from datetime import datetime
-from email.policy import default
-
 from pydantic import BaseModel
 from sqlmodel import SQLModel, Field
 
@@ -10,10 +7,12 @@ class Category(SQLModel, table=True):
     name: str
     username: str
 
+
 class CategoryAdd(BaseModel):
     name: str
     username: str | None = None
     archived: bool | None = None
+
 
 class Spend(SQLModel, table=True):
     id: str = Field(default=None, primary_key=True)
@@ -21,6 +20,7 @@ class Spend(SQLModel, table=True):
     amount: float
     description: str
     currency: str
+
 
 class SpendAdd(BaseModel):
     amount: float

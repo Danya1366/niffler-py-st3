@@ -1,8 +1,10 @@
 from playwright.sync_api import Page, expect
+from pages.base_page import BasePage
 
 
-class ProfilePage:
+class ProfilePage(BasePage):
     def __init__(self, page: Page):
+        super().__init__(page)
         self.page = page
         self.username_input = page.locator("//*[@id='username']")
         self.name_input = page.locator('[name="name"]')

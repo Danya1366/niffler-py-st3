@@ -7,15 +7,13 @@ from pages.profile_page import ProfilePage
 fake = Faker("ru_RU")
 
 
-@Pages.profile_page
-def test_user_profile(page, app_user):
-    username, password = app_user
-    profile_page = ProfilePage(page)
+@Pages.open_profile_page
+def test_user_profile(envs, profile_page):
     expect(profile_page.username_input).to_be_visible()
-    expect(profile_page.username_input).to_have_value(username)
+    expect(profile_page.username_input).to_have_value(envs.test_username)
 
 
-@Pages.profile_page
+@Pages.open_profile_page
 def test_add_name(page):
     name = "test user"
 
@@ -25,7 +23,7 @@ def test_add_name(page):
     expect(profile_page.success_alert).to_be_visible()
 
 
-@Pages.profile_page
+@Pages.open_profile_page
 def test_delete_added_name(page):
     name = "test user"
 
@@ -38,7 +36,7 @@ def test_delete_added_name(page):
     expect(profile_page.name_input).to_have_value('')
 
 
-@Pages.profile_page
+@Pages.open_profile_page
 def test_edit_added_name(page):
     name = "test user"
     edited_name = "edited username"
@@ -53,7 +51,7 @@ def test_edit_added_name(page):
     expect(profile_page.name_input).to_have_value(edited_name)
 
 
-@Pages.profile_page
+@Pages.open_profile_page
 def test_add_new_category(page):
     category_name = fake.word()
 
@@ -62,7 +60,7 @@ def test_add_new_category(page):
     expect(profile_page.get_category_block_by_name(category_name)).to_be_visible()
 
 
-@Pages.profile_page
+@Pages.open_profile_page
 def test_archive_category(page):
     category_name = fake.word()
 

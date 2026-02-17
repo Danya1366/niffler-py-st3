@@ -8,5 +8,7 @@ class TestData:
 
 class Pages:
     main_page = pytest.mark.usefixtures("main_page")
-    profile_page = pytest.mark.usefixtures("profile_page")
+    open_profile_page = pytest.mark.usefixtures("open_profile_page")
     spending_page = pytest.mark.usefixtures("spending_page")
+    open_login_page = pytest.mark.usefixtures("open_login_page")
+    open_spending_page = pytest.mark.usefixtures("open_spending_page")

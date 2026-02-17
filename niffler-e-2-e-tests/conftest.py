@@ -3,6 +3,7 @@ from urllib.parse import urljoin
 
 import pytest
 from playwright.sync_api import expect
+from playwright.sync_api import Page
 
 from databases.spend_db import SpendDb
 from models.spend import CategoryAdd
@@ -10,8 +11,10 @@ from models.config import Envs
 
 from clients.spends_client import SpendsHttpClient
 from dotenv import load_dotenv
-from pages.main_page import MainPage
+from pages.main_page import ProfilePage
 from pages.spending_page import SpendingPage
+from pages.login_page import LoginPage
+from pages.register_page import RegisterPage
 
 TEST_USER = "Test User 5"
 TEST_PASSWORD = "123321"
@@ -24,18 +27,22 @@ def envs() -> Envs:
     return Envs(
         frontend_url=os.getenv("FRONTEND_URL"),
         gateway_url=os.getenv("GATEWAY_URL"),
+        auth_url=os.getenv("AUTH_URL"),
         spend_db_url=os.getenv("SPEND_DB_URL"),
         test_password=os.getenv("TEST_PASSWORD"),
         test_username=os.getenv("TEST_USERNAME")
     )
 
+
 @pytest.fixture()
 def spends_client(envs, auth, playwright) -> SpendsHttpClient:
     return SpendsHttpClient(envs.gateway_url, auth, playwright)
 
+
 @pytest.fixture()
 def spend_db(envs) -> SpendDb:
     return SpendDb(envs.spend_db_url)
+
 
 @pytest.fixture(params=[])
 def category(request, spends_client, spend_db):
@@ -43,6 +50,7 @@ def category(request, spends_client, spend_db):
     category = spends_client.add_category(CategoryAdd(name=category_name))
     yield category.name
     spend_db.delete_category(category.id)
+
 
 @pytest.fixture(scope="function")
 def auth(page, envs):
@@ -55,6 +63,7 @@ def auth(page, envs):
 
     token = page.evaluate("() => localStorage.getItem('id_token')")
     return token
+
 
 @pytest.fixture(params=[])
 def spends(request, spends_client):
@@ -69,14 +78,44 @@ def spends(request, spends_client):
 def main_page(page, auth, envs):
     page.goto(envs.frontend_url)
 
-@pytest.fixture()
-def profile_page(page, auth, envs):
-    profile_url = urljoin(envs.frontend_url, "/profile")
-    page.goto(profile_url)
 
 @pytest.fixture()
-def spending_page(page, auth, envs):
-    spending_url = urljoin(envs.frontend_url, "/spending")
-    page.goto(spending_url)
+def profile_page(page: Page, auth, envs) -> ProfilePage:
+    profile_page = ProfilePage(page)
+    return profile_page
 
 
+@pytest.fixture()
+def open_profile_page(profile_page, envs):
+    profile_page.go_to(envs.frontend_url + '/profile')
+    profile_page.wait_for_load()
+
+
+@pytest.fixture()
+def spending_page(page: Page, auth, envs) -> SpendingPage:
+    spending_page = SpendingPage(page, envs.frontend_url)
+    return spending_page
+
+
+@pytest.fixture()
+def open_spending_page(spending_page, envs):
+    spending_page.go_to(envs.frontend_url + '/spending')
+    spending_page.wait_for_load()
+
+
+@pytest.fixture()
+def open_login_page(login_page, envs):
+    login_page.go_to(envs.auth_url)
+    login_page.wait_for_load()
+
+
+@pytest.fixture()
+def login_page(page: Page) -> LoginPage:
+    login_page = LoginPage(page)
+    return login_page
+
+
+@pytest.fixture()
+def register_page(page: Page) -> RegisterPage:
+    register_page = RegisterPage(page)
+    return register_page
