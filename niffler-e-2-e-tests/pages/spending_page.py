@@ -16,7 +16,6 @@ class SpendingPage(BasePage):
         self.description_field = page.locator('input[name="description"]')
         self.btn_save = page.locator('#save')
 
-
         yesterday = datetime.now() - timedelta(days=1)
         self.yesterday_day = str(yesterday.day)
 
@@ -81,3 +80,7 @@ class SpendingPage(BasePage):
 
         return self
 
+    def click_save_btn(self, envs):
+        self.btn_save.click()
+        expect(self.page).to_have_url(envs.main_page_url)
+        return self

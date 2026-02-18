@@ -1,5 +1,4 @@
 import os
-from urllib.parse import urljoin
 
 import pytest
 from playwright.sync_api import expect
@@ -15,6 +14,7 @@ from pages.main_page import ProfilePage
 from pages.spending_page import SpendingPage
 from pages.login_page import LoginPage
 from pages.register_page import RegisterPage
+from pages.main_page import MainPage
 
 TEST_USER = "Test User 5"
 TEST_PASSWORD = "123321"
@@ -28,6 +28,10 @@ def envs() -> Envs:
         frontend_url=os.getenv("FRONTEND_URL"),
         gateway_url=os.getenv("GATEWAY_URL"),
         auth_url=os.getenv("AUTH_URL"),
+        register_url=os.getenv("REGISTER_URL"),
+        profile_url=os.getenv("PROFILE_URL"),
+        spending_url=os.getenv("SPENDING_URL"),
+        main_page_url=os.getenv("MAIN_PAGE_URL"),
         spend_db_url=os.getenv("SPEND_DB_URL"),
         test_password=os.getenv("TEST_PASSWORD"),
         test_username=os.getenv("TEST_USERNAME")
@@ -75,8 +79,9 @@ def spends(request, spends_client):
 
 
 @pytest.fixture()
-def main_page(page, auth, envs):
-    page.goto(envs.frontend_url)
+def main_page(page: Page, auth, envs) -> MainPage:
+    main_page = MainPage(page, envs.frontend_url)
+    return main_page
 
 
 @pytest.fixture()
@@ -87,7 +92,7 @@ def profile_page(page: Page, auth, envs) -> ProfilePage:
 
 @pytest.fixture()
 def open_profile_page(profile_page, envs):
-    profile_page.go_to(envs.frontend_url + '/profile')
+    profile_page.go_to(envs.profile_url)
     profile_page.wait_for_load()
 
 
@@ -99,7 +104,7 @@ def spending_page(page: Page, auth, envs) -> SpendingPage:
 
 @pytest.fixture()
 def open_spending_page(spending_page, envs):
-    spending_page.go_to(envs.frontend_url + '/spending')
+    spending_page.go_to(envs.spending_url)
     spending_page.wait_for_load()
 
 

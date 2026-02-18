@@ -18,9 +18,8 @@ TEST_CATEGORY = "school"
     "spendDate": "2024-08-08T18:39:27.955Z",
     "currency": "RUB"
 })
-def test_spending_should_be_deleted(page, category, spends):
+def test_spending_should_be_deleted(page, category, spends, main_page):
     page.reload()
-    main_page = MainPage(page)
     expect(main_page.expense_table).to_be_visible()
     expect(main_page.expense_table).to_contain_text('QA>GURU Python Advanced 6')
     main_page.delete_spend(TEST_CATEGORY)
