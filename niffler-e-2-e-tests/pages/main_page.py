@@ -61,3 +61,19 @@ class MainPage(BasePage):
         expect(self.expense_table).to_contain_text(amount)
         expect(self.expense_table).to_contain_text(category)
         return self
+
+    def expect_content_of_table(self, description: str):
+        expect(self.expense_table).to_be_visible()
+        expect(self.expense_table).to_contain_text(description)
+        return self
+
+    def expect_content_of_table_is_empty(self, description: str):
+        expect(self.container_history_of_spending).not_to_contain_text(description)
+        return self
+
+    def click_on_checkbox_with_name(self, name: str):
+        self.page.get_by_role("checkbox", name=name).get_by_label("Edit spending").click()
+
+    def expect_statics_container_for_total(self, category, amount1, amount2):
+        total_amount = float(amount1) + float(amount2)
+        expect(self.statistics_container).to_contain_text(f"{category} {total_amount}")

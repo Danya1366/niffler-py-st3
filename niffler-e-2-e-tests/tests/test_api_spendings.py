@@ -7,6 +7,7 @@ from pages.main_page import MainPage
 
 TEST_CATEGORY = "school"
 
+
 @Pages.main_page
 @TestData.category(TEST_CATEGORY)
 @TestData.spends({
@@ -20,7 +21,6 @@ TEST_CATEGORY = "school"
 })
 def test_spending_should_be_deleted(page, category, spends, main_page):
     page.reload()
-    expect(main_page.expense_table).to_be_visible()
-    expect(main_page.expense_table).to_contain_text('QA>GURU Python Advanced 6')
+    main_page.expect_content_of_table("QA>GURU Python Advanced 6")
     main_page.delete_spend(TEST_CATEGORY)
-    expect(main_page.container_history_of_spending).not_to_contain_text('QA>GURU Python Advanced 6')
+    main_page.expect_content_of_table_is_empty("QA>GURU Python Advanced 6")
