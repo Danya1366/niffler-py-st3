@@ -23,6 +23,7 @@ class MainPage(BasePage):
         self.form_logout_btn = page.get_by_role('button', name="Log out")
         self.form_close_btn = page.get_by_role("button", name="Close")
         self.profile_btn = page.locator('[href="/profile"]')
+        self.menu = page.get_by_role("menu")
 
     def remove_all_spends(self):
         self.page.get_by_role("checkbox", name="select all rows").check()
@@ -63,6 +64,7 @@ class MainPage(BasePage):
         return self
 
     def expect_content_of_table(self, description: str):
+        self.page.reload()
         expect(self.expense_table).to_be_visible()
         expect(self.expense_table).to_contain_text(description)
         return self
@@ -77,3 +79,17 @@ class MainPage(BasePage):
     def expect_statics_container_for_total(self, category, amount1, amount2):
         total_amount = float(amount1) + float(amount2)
         expect(self.statistics_container).to_contain_text(f"{category} {total_amount}")
+
+    def dont_logout(self, envs):
+        self.menu_btn.click()
+        self.sign_out_btn.click()
+        expect(self.form_close_btn).to_be_visible()
+        self.form_close_btn.click()
+        expect(self.page).to_have_url(envs.main_page_url)
+
+    def logot(self, envs):
+        self.menu_btn.click()
+        expect(self.menu).to_be_visible()
+        self.sign_out_btn.click()
+        self.form_logout_btn.click()
+        expect(self.page).to_have_url(envs.login_url)

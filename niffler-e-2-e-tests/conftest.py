@@ -28,6 +28,7 @@ def envs() -> Envs:
         frontend_url=os.getenv("FRONTEND_URL"),
         gateway_url=os.getenv("GATEWAY_URL"),
         auth_url=os.getenv("AUTH_URL"),
+        login_url=os.getenv("LOGIN_URL"),
         register_url=os.getenv("REGISTER_URL"),
         profile_url=os.getenv("PROFILE_URL"),
         spending_url=os.getenv("SPENDING_URL"),
@@ -115,12 +116,12 @@ def open_login_page(login_page, envs):
 
 
 @pytest.fixture()
-def login_page(page: Page) -> LoginPage:
-    login_page = LoginPage(page)
+def login_page(page: Page, envs) -> LoginPage:
+    login_page = LoginPage(page, envs.frontend_url)
     return login_page
 
 
 @pytest.fixture()
-def register_page(page: Page) -> RegisterPage:
-    register_page = RegisterPage(page)
+def register_page(page: Page, envs) -> RegisterPage:
+    register_page = RegisterPage(page, envs.frontend_url)
     return register_page

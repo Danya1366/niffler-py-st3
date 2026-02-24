@@ -3,8 +3,9 @@ from pages.login_page import LoginPage
 
 
 class RegisterPage:
-    def __init__(self, page: Page):
+    def __init__(self, page: Page, frontend_url: str):
         self.page = page
+        self.frontend_url = frontend_url
 
         self.username_input = page.locator('[id="username"]')
         self.password_input = page.locator('[id="password"]')
@@ -12,6 +13,7 @@ class RegisterPage:
         self.submit_btn = page.locator('.form__submit')
         self.sgn_in_btn = page.locator('.form_sign-in')
         self.register_log_in_btn = page.get_by_role("link", name="Log in")
+        self.form_error = page.locator('[class="form__error"]')
 
     def password_input_fill(self, password: str):
         self.password_input.click()
@@ -32,7 +34,7 @@ class RegisterPage:
         expect(self.page.locator('.form__paragraph_success')).to_be_visible()
         expect(self.sgn_in_btn).to_be_visible()
         self.sgn_in_btn.click()
-        return LoginPage(self.page)
+        return LoginPage(self.page, self.frontend_url)
 
     def register_new_user(self, username: str, password: str, submit_password: str):
         expect(self.username_input).to_be_visible()
@@ -44,3 +46,10 @@ class RegisterPage:
         self.password_submit_input.fill(submit_password)
         self.submit_btn.click()
         return self
+
+    def expect_form_error(self):
+        expect(self.form_error).to_contain_text('Passwords should be equal')
+
+    def btn_log_in_registration(self):
+        self.register_log_in_btn.click()
+        expect(self.page).to_have_url("http://auth.niffler.dc:9000/login")

@@ -1,15 +1,24 @@
+
+
 class TestSpendings:
     TEST_CATEGORY_1 = "категория 1"
+    description = "QA>GURU Python Advanced 6"
 
     TestDataSpend = {
         "amount": "108.51",
-        "description": "QA>GURU Python Advanced 6",
-        "category": {
-            "name": "категория 1"
-        },
+        "description": description,
+        "category":
+            {"name": TEST_CATEGORY_1
+             },
         "spendDate": "2024-08-08T18:39:27.955Z",
         "currency": "RUB"
     }
+
+
+class TestConstants:
+    TEST_CATEGORY_1 = "категория 1"
+    TEST_CATEGORY = "school"
+
     edited_amount = "200.03"
     edited_category = 'Тестовая для проверки изменений'
     edited_description = 'Тест'
@@ -25,3 +34,7 @@ class TestSpendings:
     amount_to_add = "100"
     category_to_add = "new category"
     description_to_add = "вчерашние траты"
+
+
+class UserCreds:
+    name = "test user"
