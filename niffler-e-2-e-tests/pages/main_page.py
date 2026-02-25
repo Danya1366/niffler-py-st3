@@ -93,3 +93,4 @@ class MainPage(BasePage):
         self.sign_out_btn.click()
         self.form_logout_btn.click()
         expect(self.page).to_have_url(envs.login_url)
+        expect(self.page.get_by_text("Log in").first).to_be_visible()

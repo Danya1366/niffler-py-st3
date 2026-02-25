@@ -36,9 +36,37 @@ class ProfilePage(BasePage):
         self.category_input.press("Enter")
         expect(self.alert_added_new_category).to_contain_text(
             f"You've added new category: {category_name}")
+        expect(self.get_category_block_by_name(category_name)).to_be_visible()
+        expect(self.get_category_block_by_name(category_name)).to_contain_text(category_name)
         return self
 
     def get_category_block_by_name(self, category_name: str):
         return self.category_block.filter(
             has=self.page.get_by_text(category_name, exact=True)
         )
+
+    def expect_profile_data(self, username: str):
+        expect(self.username_input).to_be_visible()
+        expect(self.username_input).to_have_value(username)
+        return self
+
+    def add_name_in_profile(self, name: str):
+        expect(self.name_input).to_be_visible()
+        self.name_input.click()
+        self.name_input.fill(name)
+        self.save_changes_btn.click()
+        expect(self.success_alert).to_be_visible()
+        return self
+
+    def delete_added_profile_name(self):
+        self.delete_profile_name()
+        self.page.reload()
+        expect(self.name_input).to_be_empty()
+        return self
+
+    def archive_category(self, category_name: str):
+        archive_button = self.get_category_block_by_name(category_name).get_by_label("Archive category")
+        archive_button.click()
+        self.btn_archive.click()
+        expect(self.get_category_block_by_name(category_name)).not_to_be_visible()
+        return self

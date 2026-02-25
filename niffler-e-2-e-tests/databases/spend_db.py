@@ -1,3 +1,4 @@
+import uuid
 from typing import Sequence
 
 from sqlalchemy import create_engine, Engine
@@ -17,8 +18,36 @@ class SpendDb:
             statement = select(Category).where(Category.username == username)
             return session.exec(statement).all()
 
+    def add_user_category(self, username: str, category_name: str) -> Category:
+        with Session(self.engine) as session:
+            new_category = Category(
+                id=str(uuid.uuid4()),
+                name=category_name,
+                username=username
+            )
+
+            session.add(new_category)
+            session.commit()
+            session.refresh(new_category)
+
+            return new_category
+
+
     def delete_category(self, category_id: str):
         with Session(self.engine) as session:
             category = session.get(Category, category_id)
             session.delete(category)
             session.commit()
+
+    def get_category_by_name(self, username: str, category_name: str) -> Category:
+        with Session(self.engine) as session:
+            category = select(Category).where(
+                Category.username == username,
+                Category.name == category_name
+            )
+            return session.exec(category).first()
+
+    def get_category_by_id(self, category_id: str) -> Category:
+        with Session(self.engine) as session:
+            category = select(Category).where(Category.id == category_id)
+            return session.exec(category).first()

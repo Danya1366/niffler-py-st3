@@ -18,6 +18,7 @@ class TestSpendings:
 class TestConstants:
     TEST_CATEGORY_1 = "категория 1"
     TEST_CATEGORY = "school"
+    TEST_CATEGORY_BD = "test_category_bd"
 
     edited_amount = "200.03"
     edited_category = 'Тестовая для проверки изменений'
@@ -38,3 +39,4 @@ class TestConstants:
 
 class UserCreds:
     name = "test user"
+    edited_name = "edited username"
