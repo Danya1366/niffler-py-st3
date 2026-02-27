@@ -1,4 +1,4 @@
-from marks import  TestData
+from marks import TestData
 from test_data import TestConstants
 
 
@@ -9,6 +9,7 @@ def test_add_category_and_check_db(envs, category, spend_db):
 
     assert len(user_categories) > 0, "Категорий у этого пользовтаеля нет"
     assert category in user_category_names
+
 
 def test_delete_category_and_check_db(envs, spend_db):
     new_category = spend_db.add_user_category(envs.test_username, TestConstants.TEST_CATEGORY_BD)

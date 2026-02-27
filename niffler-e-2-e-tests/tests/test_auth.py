@@ -10,6 +10,7 @@ def test_sign_up_passwords_dont_match(login_page, register_page):
     fake_username = fake.name()
     fake_password = fake.password()
     fake_submit_password = fake.password()
+
     login_page.click_register_btn()
     register_page.register_new_user(fake_username, fake_password, fake_submit_password)
     register_page.expect_form_error()

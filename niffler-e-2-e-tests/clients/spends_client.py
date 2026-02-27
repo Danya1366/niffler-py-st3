@@ -1,5 +1,10 @@
 from urllib.parse import urljoin
+
+import allure
+import json
+
 from playwright.sync_api import APIResponse
+from typing import Optional, Dict
 
 from models.spend import Category, Spend, CategoryAdd, SpendAdd
 
@@ -17,6 +22,28 @@ class SpendsHttpClient:
                 'Content-Type': 'application/json'
             }
         )
+
+    def _make_request(self, method: str, url: str, data: Optional[Dict] = None,
+                      params: Optional[Dict] = None) -> APIResponse:
+        # Логируем запрос
+        if data:
+            allure.attach(json.dumps(data, indent=2), name="Request body", attachment_type=allure.attachment_type.JSON)
+        if params:
+            allure.attach(json.dumps(params, indent=2), name="Request params",
+                          attachment_type=allure.attachment_type.JSON)
+
+        # Выполняем запрос
+        kwargs = {k: v for k, v in [('data', data and json.dumps(data)),
+                                    ('params', params)] if v}
+        response = getattr(self.session, method.lower())(url, **kwargs)
+
+        # Логируем ответ
+        allure.attach(f"Method: {method.upper()}\nURL: {response.url}\nStatus: {response.status}",
+                      name="Response Info",
+                      attachment_type=allure.attachment_type.TEXT)
+        allure.attach(response.text(), name="Response Body", attachment_type=allure.attachment_type.TEXT)
+
+        return response
 
     def get_categories(self) -> list[CategoryAdd]:
         response = self.session.get("/api/categories/all")

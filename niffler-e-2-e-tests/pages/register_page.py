@@ -49,7 +49,9 @@ class RegisterPage:
 
     def expect_form_error(self):
         expect(self.form_error).to_contain_text('Passwords should be equal')
+        return self
 
     def btn_log_in_registration(self):
         self.register_log_in_btn.click()
         expect(self.page).to_have_url("http://auth.niffler.dc:9000/login")
+        return self

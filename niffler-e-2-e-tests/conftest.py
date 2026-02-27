@@ -1,6 +1,11 @@
 import os
 
+import allure
 import pytest
+from allure_commons.reporter import AllureReporter
+from allure_commons.types import AttachmentType
+from allure_pytest.listener import AllureListener
+from pytest import FixtureDef, FixtureRequest
 from playwright.sync_api import expect
 from playwright.sync_api import Page
 
@@ -16,15 +21,31 @@ from pages.login_page import LoginPage
 from pages.register_page import RegisterPage
 from pages.main_page import MainPage
 
-TEST_USER = "Test User 5"
-TEST_PASSWORD = "123321"
-EXPECTED_URL_AFTER_LOGIN = "http://frontend.niffler.dc/main"
+
+def allure_logger(config) -> AllureReporter:
+    listener: AllureListener = config.pluginmanager.get_plugin("allure_listener")
+    return listener.allure_logger
+
+
+@pytest.hookimpl(hookwrapper=True, trylast=True)
+def pytest_runtest_call(item):
+    yield
+    allure.dynamic.title(" ".join(item.name.split("_")[1:]).title())
+
+
+@pytest.hookimpl(hookwrapper=True, trylast=True)
+def pytest_fixture_setup(fixturedef: FixtureDef, request: FixtureRequest):
+    yield
+    logger = allure_logger(request.config)
+    item = logger.get_last_item()
+    scope_letter = fixturedef.scope[0].upper()
+    item.name = f"[{scope_letter}]" + " ".join(fixturedef.argname.split("_")).title()
 
 
 @pytest.fixture(scope="session")
 def envs() -> Envs:
     load_dotenv()
-    return Envs(
+    envs_instance = Envs(
         frontend_url=os.getenv("FRONTEND_URL"),
         gateway_url=os.getenv("GATEWAY_URL"),
         auth_url=os.getenv("AUTH_URL"),
@@ -37,6 +58,8 @@ def envs() -> Envs:
         test_password=os.getenv("TEST_PASSWORD"),
         test_username=os.getenv("TEST_USERNAME")
     )
+    allure.attach(envs_instance.model_dump_json(indent=2), name="envs.json", attachment_type=AttachmentType.JSON)
+    return envs_instance
 
 
 @pytest.fixture()
@@ -65,8 +88,8 @@ def auth(page, envs):
     page.locator('.form__submit').click()
     page.wait_for_url(f"{envs.frontend_url}/main")
     expect(page.get_by_text("History of Spendings")).to_be_visible()
-
     token = page.evaluate("() => localStorage.getItem('id_token')")
+    allure.attach(token, name="token.txt", attachment_type=AttachmentType.TEXT)
     return token
 
 

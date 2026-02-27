@@ -75,10 +75,12 @@ class MainPage(BasePage):
 
     def click_on_checkbox_with_name(self, name: str):
         self.page.get_by_role("checkbox", name=name).get_by_label("Edit spending").click()
+        return self
 
     def expect_statics_container_for_total(self, category, amount1, amount2):
         total_amount = float(amount1) + float(amount2)
         expect(self.statistics_container).to_contain_text(f"{category} {total_amount}")
+        return self
 
     def dont_logout(self, envs):
         self.menu_btn.click()
@@ -86,6 +88,7 @@ class MainPage(BasePage):
         expect(self.form_close_btn).to_be_visible()
         self.form_close_btn.click()
         expect(self.page).to_have_url(envs.main_page_url)
+        return self
 
     def logot(self, envs):
         self.menu_btn.click()
@@ -94,3 +97,4 @@ class MainPage(BasePage):
         self.form_logout_btn.click()
         expect(self.page).to_have_url(envs.login_url)
         expect(self.page.get_by_text("Log in").first).to_be_visible()
+        return self
