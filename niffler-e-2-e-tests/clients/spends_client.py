@@ -46,36 +46,49 @@ class SpendsHttpClient:
         return response
 
     def get_categories(self) -> list[CategoryAdd]:
-        response = self.session.get("/api/categories/all")
-        self.raise_for_status(response)
-        return [CategoryAdd.model_validate(item) for item in response.json()]
+        with allure.step('оплучить категорию трат по API'):
+            response = self.session.get("/api/categories/all")
+            self.raise_for_status(response)
+            return [CategoryAdd.model_validate(item) for item in response.json()]
 
     def add_category(self, category: CategoryAdd) -> Category:
-        response = self.session.post("/api/categories/add", data=category.model_dump())
-        self.raise_for_status(response)
-        return Category.model_validate(response.json())
+        with allure.step('Добавить категорию трат по API'):
+            response = self.session.post("/api/categories/add", data=category.model_dump())
+            self.raise_for_status(response)
+            return Category.model_validate(response.json())
 
     def add_spends(self, spend: dict) -> Spend:
-        spend_data = SpendAdd.model_validate(spend)
-        response = self.session.post("/api/spends/add", data=spend_data.model_dump())
-        self.raise_for_status(response)
-        return Spend.model_validate(response.json())
+        with allure.step('Добавить трату по API'):
+            spend_data = SpendAdd.model_validate(spend)
+            response = self.session.post("/api/spends/add", data=spend_data.model_dump())
+            self.raise_for_status(response)
+            return Spend.model_validate(response.json())
 
     def get_spends(self) -> list[Spend]:
-        url = urljoin(self.base_url, "/api/spends/all")
-        response = self.session.get(url)
-        self.raise_for_status(response)
-        return [Spend.model_validate(item) for item in response.json()]
+        with allure.step('Получить траты по API'):
+            url = urljoin(self.base_url, "/api/spends/all")
+            response = self.session.get(url)
+            self.raise_for_status(response)
+            return [Spend.model_validate(item) for item in response.json()]
 
     def get_all_spendings(self) -> list[Spend]:
-        response = self.session.get("/api/v2/spends/all")
-        self.raise_for_status(response)
-        return [Spend.model_validate(item) for item in response.json()["content"]]
+        with allure.step('Получить все траты по API'):
+            response = self.session.get("/api/v2/spends/all")
+            self.raise_for_status(response)
+            return [Spend.model_validate(item) for item in response.json()["content"]]
 
     def remove_spends(self, ids: list[str]):
-        ids_param = ",".join(ids)
-        response = self.session.delete("/api/spends/remove", params={"ids": ids_param})
-        self.raise_for_status(response)
+        with allure.step('Удалить трату по API'):
+            ids_param = ",".join(ids)
+            response = self.session.delete("/api/spends/remove", params={"ids": ids_param})
+            self.raise_for_status(response)
+
+    def delete_all_spendings(self):
+        with allure.step('Удалить все траты по API, если они есть'):
+            all_spendings = self.get_all_spendings()
+            spending_ids = [spending.id for spending in all_spendings]
+            if spending_ids:
+                self.remove_spends(spending_ids)
 
     @staticmethod
     def raise_for_status(response: APIResponse):
