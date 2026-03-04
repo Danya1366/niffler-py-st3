@@ -28,18 +28,20 @@ def allure_logger(config) -> AllureReporter:
 
 
 @pytest.hookimpl(hookwrapper=True, trylast=True)
-def pytest_runtest_call(item):
-    yield
-    allure.dynamic.title(" ".join(item.name.split("_")[1:]).title())
-
-
-@pytest.hookimpl(hookwrapper=True, trylast=True)
 def pytest_fixture_setup(fixturedef: FixtureDef, request: FixtureRequest):
     yield
     logger = allure_logger(request.config)
     item = logger.get_last_item()
     scope_letter = fixturedef.scope[0].upper()
     item.name = f"[{scope_letter}]" + " ".join(fixturedef.argname.split("_")).title()
+
+
+@pytest.hookimpl(hookwrapper=True, tryfirst=True)
+def pytest_runtest_teardown(item):
+    yield
+    reporter = allure_logger(item.config)
+    test = reporter.get_test(None)
+    test.labels = list(filter(lambda x: x.name not in ("suite", "subSuite", "parentSuite"), test.labels))
 
 
 @pytest.fixture(scope="session")
