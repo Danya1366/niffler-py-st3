@@ -109,6 +109,13 @@ def spends(request, spends_client):
     if spend.id in [spend.id for spend in all_spend]:
         spends_client.remove_spends([spend.id])
 
+@allure.title('Удаление всех трат до и после теста')
+@pytest.fixture(scope="function")
+def clean_spendings_setup(spends_client):
+    yield
+
+    spends_client.delete_all_spendings()
+
 
 @allure.title('Получение main page')
 @pytest.fixture()

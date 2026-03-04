@@ -58,6 +58,7 @@ class MainPage(BasePage):
 
     def go_to_spend(self):
         with allure.step('Перейти в траты'):
+            self.page.reload()
             self.add_new_spend_btn.click()
             expect(self.page).to_have_url(f"{self.frontend_url}/spending")
             return SpendingPage(self.page, self.frontend_url)

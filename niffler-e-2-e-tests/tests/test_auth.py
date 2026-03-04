@@ -28,7 +28,7 @@ class TestRegistration:
         login_page.click_register_btn()
         register_page.register_new_user(fake_username, fake_password, fake_password)
         login_page = register_page.click_login()
-        login_page.log_in(fake_username, fake_password, envs)
+        login_page.log_in(fake_username, fake_password)
         login_page.expect_log_in(envs)
 
     @allure.title('Переход к окну авторизации из окна регистрации')
@@ -43,7 +43,7 @@ class TestAuth:
     @allure.title('Авторизация с валидными данными')
     @Pages.open_login_page
     def test_valid_auth(self, login_page, envs):
-        login_page.log_in(envs.test_username, envs.test_password, envs)
+        login_page.log_in(envs.test_username, envs.test_password)
         login_page.expect_log_in(envs)
 
     @allure.title('Авторизация с невалидным именем пользователя')
