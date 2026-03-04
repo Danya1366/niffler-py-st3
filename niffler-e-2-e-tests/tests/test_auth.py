@@ -29,6 +29,7 @@ class TestRegistration:
         register_page.register_new_user(fake_username, fake_password, fake_password)
         login_page = register_page.click_login()
         login_page.log_in(fake_username, fake_password, envs)
+        login_page.expect_log_in(envs)
 
     @allure.title('Переход к окну авторизации из окна регистрации')
     @Pages.open_login_page
@@ -43,6 +44,7 @@ class TestAuth:
     @Pages.open_login_page
     def test_valid_auth(self, login_page, envs):
         login_page.log_in(envs.test_username, envs.test_password, envs)
+        login_page.expect_log_in(envs)
 
     @allure.title('Авторизация с невалидным именем пользователя')
     @Pages.open_login_page
@@ -72,10 +74,12 @@ class TestAuth:
     @allure.title('Успешный выход из системы')
     @Pages.main_page
     def test_logout(self, envs, main_page):
-        main_page.logot(envs)
+        main_page.logout(envs)
+        main_page.expect_logout(envs)
 
     @allure.story("Логаут")
     @allure.title("Отмена выхода из системы")
     @Pages.main_page
     def test_dont_logout(self, envs, main_page):
-        main_page.dont_logout(envs)
+        main_page.dont_logout()
+        main_page.expect_dont_logout(envs)

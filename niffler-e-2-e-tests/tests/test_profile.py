@@ -26,6 +26,7 @@ class TestProfile:
     def test_delete_added_name(self, profile_page):
         profile_page.add_name_in_profile(UserCreds.name)
         profile_page.delete_added_profile_name()
+        profile_page.expect_deleted_profile_name()
 
     @allure.story('Имя пользователя')
     @allure.title('Редактирование имени пользователя')
@@ -42,6 +43,7 @@ class TestProfile:
         category_name = fake.word()
 
         profile_page.add_new_category(category_name)
+        profile_page.expect_added_category(category_name)
 
     @allure.story('Категории UI')
     @allure.title('Архивация категории')
@@ -50,4 +52,6 @@ class TestProfile:
         category_name = fake.word()
 
         profile_page.add_new_category(category_name)
+        profile_page.expect_added_category(category_name)
         profile_page.archive_category(category_name)
+        profile_page.expect_arсhive_category(category_name)

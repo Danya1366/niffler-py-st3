@@ -42,10 +42,14 @@ class LoginPage(BasePage):
             self.registor_button.click()
             return RegisterPage(self.page, self.frontend_url)
 
-    def log_in(self, username, password, envs=None):
+    def log_in(self, username, password):
         with allure.step('Авторизоваться используя учетные данные пользователя'):
             self.fill_user_creds(username, password)
             self.btn_submit.click()
+            return self
+
+    def expect_log_in(self,envs=None):
+        with allure.step('Проверяем что авторизованны'):
             expect(self.page).to_have_url(envs.main_page_url)
             expect(self.page.get_by_text("History of Spendings")).to_be_visible()
             return self

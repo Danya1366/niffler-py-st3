@@ -93,21 +93,29 @@ class MainPage(BasePage):
             expect(self.statistics_container).to_contain_text(f"{category} {total_amount}")
             return self
 
-    def dont_logout(self, envs):
+    def dont_logout(self):
         with allure.step('Не выполнить выход из системы по кнопке Отмена'):
             self.menu_btn.click()
             self.sign_out_btn.click()
             expect(self.form_close_btn).to_be_visible()
             self.form_close_btn.click()
+            return self
+
+    def expect_dont_logout(self, envs):
+        with allure.step('Проверка, что LogOut не выполнен'):
             expect(self.page).to_have_url(envs.main_page_url)
             return self
 
-    def logot(self, envs):
-        with allure.step('Выполнить выход из системы по кнопке '):
+    def logout(self, envs):
+        with allure.step('Выполнить выход из системы по кнопке'):
             self.menu_btn.click()
             expect(self.menu).to_be_visible()
             self.sign_out_btn.click()
             self.form_logout_btn.click()
+            return self
+
+    def expect_logout(self, envs):
+        with allure.step('Проверка выполнения выхода'):
             expect(self.page).to_have_url(envs.login_url)
             expect(self.page.get_by_text("Log in").first).to_be_visible()
             return self

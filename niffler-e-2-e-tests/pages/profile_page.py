@@ -38,6 +38,10 @@ class ProfilePage(BasePage):
             expect(self.category_input).to_be_visible()
             self.category_input.fill(category_name)
             self.category_input.press("Enter")
+            return self
+
+    def expect_added_category(self, category_name: str):
+        with allure.step('Проверяем, что категория добавлена'):
             expect(self.alert_added_new_category).to_contain_text(
                 f"You've added new category: {category_name}")
             expect(self.get_category_block_by_name(category_name)).to_be_visible()
@@ -69,6 +73,10 @@ class ProfilePage(BasePage):
         with allure.step('удалить Имя пользователя и проверить удаление'):
             self.delete_profile_name()
             self.page.reload()
+            return self
+
+    def expect_deleted_profile_name(self):
+        with allure.step('Проверяем что добавленное имя удалено'):
             expect(self.name_input).to_be_empty()
             return self
 
@@ -77,5 +85,9 @@ class ProfilePage(BasePage):
             archive_button = self.get_category_block_by_name(category_name).get_by_label("Archive category")
             archive_button.click()
             self.btn_archive.click()
+            return self
+
+    def expect_arсhive_category(self, category_name: str):
+        with allure.step('Проверяем что категория не отображается'):
             expect(self.get_category_block_by_name(category_name)).not_to_be_visible()
             return self
