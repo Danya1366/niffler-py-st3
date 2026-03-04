@@ -51,7 +51,7 @@ class ProfilePage(BasePage):
             )
 
     def expect_profile_data(self, username: str):
-         with allure.step('Проверить данные пользователя'):
+        with allure.step('Проверить данные пользователя'):
             expect(self.username_input).to_be_visible()
             expect(self.username_input).to_have_value(username)
             return self

@@ -42,7 +42,7 @@ class LoginPage(BasePage):
             self.registor_button.click()
             return RegisterPage(self.page, self.frontend_url)
 
-    def log_in(self, username, password, envs = None):
+    def log_in(self, username, password, envs=None):
         with allure.step('Авторизоваться используя учетные данные пользователя'):
             self.fill_user_creds(username, password)
             self.btn_submit.click()

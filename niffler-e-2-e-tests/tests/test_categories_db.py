@@ -3,6 +3,7 @@ import allure
 from marks import TestData
 from test_data import TestConstants
 
+
 @allure.feature('Категории')
 class TestCategories:
     @allure.title('Добавление категорий и проверка базы данных')

@@ -1,12 +1,17 @@
+import allure
+
 from marks import Pages, TestData
 from test_data import TestSpendings
 
 
-@Pages.main_page
-@TestData.category(TestSpendings.TEST_CATEGORY_1)
-@TestData.spends(TestSpendings.TestDataSpend)
-def test_spending_should_be_deleted(page, category, spends, main_page):
-    page.reload()
-    main_page.expect_content_of_table(TestSpendings.description)
-    main_page.delete_spend(TestSpendings.TEST_CATEGORY_1)
-    main_page.expect_content_of_table_is_empty(TestSpendings.description)
+@allure.feature('Добавление траты по api')
+class TestSpendApi:
+    @allure.title('Добавляем новую трату по апи и удаляем через ui')
+    @Pages.main_page
+    @TestData.category(TestSpendings.TEST_CATEGORY_1)
+    @TestData.spends(TestSpendings.TestDataSpend)
+    def test_spending_should_be_deleted(self, page, category, spends, main_page):
+        page.reload()
+        main_page.expect_content_of_table(TestSpendings.description)
+        main_page.delete_spend(TestSpendings.TEST_CATEGORY_1)
+        main_page.expect_content_of_table_is_empty(TestSpendings.description)
