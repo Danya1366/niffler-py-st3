@@ -6,14 +6,15 @@ from allure_commons.types import AttachmentType
 from sqlalchemy import create_engine, Engine, event
 from sqlmodel import Session, select
 
-from models.spend import Category
+from models.category import Category
+from models.config import Envs
 
 
 class SpendDb:
     engine: Engine
 
-    def __init__(self, db_url: str):
-        self.engine = create_engine(db_url)
+    def __init__(self, envs: Envs):
+        self.engine = create_engine(envs.spend_db_url)
         event.listen(self.engine, "do_execute", fn=self.attach_sql)
 
     @staticmethod

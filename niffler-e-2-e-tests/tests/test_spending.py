@@ -2,7 +2,7 @@ import allure
 
 from conftest import main_page
 from marks import Pages, TestData
-from test_data import TestConstants, TestSpendings
+from models.enums import TestConstants, TestSpendings
 
 
 @allure.feature('Траты')

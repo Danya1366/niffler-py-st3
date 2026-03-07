@@ -2,7 +2,7 @@ import allure
 from faker import Faker
 
 from marks import Pages
-from test_data import UserCreds
+from models.enums import UserCreds
 
 fake = Faker("ru_RU")
 

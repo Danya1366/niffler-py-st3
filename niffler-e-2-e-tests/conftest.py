@@ -10,7 +10,7 @@ from playwright.sync_api import expect
 from playwright.sync_api import Page
 
 from databases.spend_db import SpendDb
-from models.spend import CategoryAdd
+from models.category import CategoryAdd
 from models.config import Envs
 
 from clients.spends_client import SpendsHttpClient
@@ -65,49 +65,18 @@ def envs() -> Envs:
     return envs_instance
 
 
-@allure.title('Http клиент')
-@pytest.fixture()
-def spends_client(envs, auth, playwright) -> SpendsHttpClient:
-    return SpendsHttpClient(envs.gateway_url, auth, playwright)
+# @allure.title('Http клиент')
+# @pytest.fixture()
+# def spends_client(envs, auth, playwright) -> SpendsHttpClient:
+#     return SpendsHttpClient(envs.gateway_url, auth, playwright)
+#
+#
+# @allure.title('Таблица в БД для трат')
+# @pytest.fixture()
+# def spend_db(envs) -> SpendDb:
+#     return SpendDb(envs.spend_db_url)
 
 
-@allure.title('Таблица в БД для трат')
-@pytest.fixture()
-def spend_db(envs) -> SpendDb:
-    return SpendDb(envs.spend_db_url)
-
-
-@allure.title('Добавление категории трат')
-@pytest.fixture(params=[])
-def category(request, spends_client, spend_db):
-    category_name = request.param
-    category = spends_client.add_category(CategoryAdd(name=category_name))
-    yield category.name
-    spend_db.delete_category(category.id)
-
-
-@allure.title('Авторизация и получение токена')
-@pytest.fixture(scope="function")
-def auth(page, envs):
-    page.goto(envs.frontend_url)
-    page.get_by_placeholder('Type your username').fill(envs.test_username)
-    page.get_by_placeholder('Type your password').fill(envs.test_password)
-    page.locator('.form__submit').click()
-    page.wait_for_url(f"{envs.frontend_url}/main")
-    expect(page.get_by_text("History of Spendings")).to_be_visible()
-    token = page.evaluate("() => localStorage.getItem('id_token')")
-    allure.attach(token, name="token.txt", attachment_type=AttachmentType.TEXT)
-    return token
-
-
-@allure.title('Добавление траты')
-@pytest.fixture(params=[])
-def spends(request, spends_client):
-    spend = spends_client.add_spends(request.param)
-    yield spend
-    all_spend = spends_client.get_spends()
-    if spend.id in [spend.id for spend in all_spend]:
-        spends_client.remove_spends([spend.id])
 
 @allure.title('Удаление всех трат до и после теста')
 @pytest.fixture(scope="function")

@@ -6,14 +6,18 @@ import json
 from playwright.sync_api import APIResponse
 from typing import Optional, Dict
 
-from models.spend import Category, Spend, CategoryAdd, SpendAdd
+from models.config import Envs
+from models.spend import Spend, SpendAdd
+from models.category import Category, CategoryAdd
+from utils.sessions import BaseSession
 
 
 class SpendsHttpClient:
     base_url: str
 
-    def __init__(self, base_url: str, token: str, playwright):
+    def __init__(self, base_url: str, token: str, playwright, envs: Envs):
         self.base_url = base_url
+        self.session = BaseSession(base_url=envs.frontend_url)
         self.session = playwright.request.new_context(
             base_url=base_url,
             extra_http_headers={

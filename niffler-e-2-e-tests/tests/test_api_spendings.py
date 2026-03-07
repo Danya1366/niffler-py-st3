@@ -1,7 +1,7 @@
 import allure
 
 from marks import Pages, TestData
-from test_data import TestSpendings
+from models.enums import TestSpendings
 
 
 @allure.feature('Добавление траты по api')

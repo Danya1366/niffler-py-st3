@@ -1,7 +1,7 @@
 import allure
 
 from marks import TestData
-from test_data import TestConstants
+from models.enums import TestConstants
 
 
 @allure.feature('Категории')
