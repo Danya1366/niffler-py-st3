@@ -16,50 +16,50 @@ class RegisterPage:
         self.register_log_in_btn = page.get_by_role("link", name="Log in")
         self.form_error = page.locator('[class="form__error"]')
 
+    @allure.step('Ввести пароль')
     def password_input_fill(self, password: str):
-        with allure.step('Ввести пароль'):
-            self.password_input.click()
-            self.password_input.fill(password)
-            return self
+        self.password_input.click()
+        self.password_input.fill(password)
+        return self
 
+    @allure.step('Ввести логин')
     def username_input_fill(self, username: str):
-        with allure.step('Ввести логин'):
-            self.username_input.click()
-            self.username_input.fill(username)
-            return self
+        self.username_input.click()
+        self.username_input.fill(username)
+        return self
 
+    @allure.step('Повторить пароль')
     def password_submit_input_fill(self, password: str):
-        with allure.step('Повторить пароль'):
-            self.password_submit_input.click()
-            self.password_submit_input.fill(password)
-            return self
+        self.password_submit_input.click()
+        self.password_submit_input.fill(password)
+        return self
 
+    @allure.step('Нажать на кнопку log in')
     def click_login(self):
-        with allure.step('Нажать на кнопку log in'):
-            expect(self.page.locator('.form__paragraph_success')).to_be_visible()
-            expect(self.sgn_in_btn).to_be_visible()
-            self.sgn_in_btn.click()
-            return LoginPage(self.page, self.frontend_url)
+        expect(self.page.locator('.form__paragraph_success')).to_be_visible()
+        expect(self.sgn_in_btn).to_be_visible()
+        self.sgn_in_btn.click()
+        return LoginPage(self.page, self.frontend_url)
 
+    @allure.step('Зарегестрировать нового пользователя')
     def register_new_user(self, username: str, password: str, submit_password: str):
-        with allure.step('Зарегестрировать нового пользователя'):
-            expect(self.username_input).to_be_visible()
-            expect(self.password_input).to_be_visible()
-            expect(self.password_submit_input).to_be_visible()
+        expect(self.username_input).to_be_visible()
+        expect(self.password_input).to_be_visible()
+        expect(self.password_submit_input).to_be_visible()
 
-            self.username_input.fill(username)
-            self.password_input.fill(password)
-            self.password_submit_input.fill(submit_password)
-            self.submit_btn.click()
-            return self
+        self.username_input.fill(username)
+        self.password_input.fill(password)
+        self.password_submit_input.fill(submit_password)
+        self.submit_btn.click()
+        return self
 
+    @allure.step('Проверить отображение форму ошибки')
     def expect_form_error(self):
-        with allure.step('Проверить отображение форму ошибки'):
-            expect(self.form_error).to_contain_text('Passwords should be equal')
-            return self
+        expect(self.form_error).to_contain_text('Passwords should be equal')
+        return self
 
+    @allure.step('Нажать на кнопку log in на странице регистрации')
     def btn_log_in_registration(self):
-        with allure.step('Нажать на кнопку log in на странице регистрации'):
-            self.register_log_in_btn.click()
-            expect(self.page).to_have_url("http://auth.niffler.dc:9000/login")
-            return self
+        self.register_log_in_btn.click()
+        expect(self.page).to_have_url("http://auth.niffler.dc:9000/login")
+        return self

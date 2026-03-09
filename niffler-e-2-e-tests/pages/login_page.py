@@ -15,41 +15,41 @@ class LoginPage(BasePage):
         self.msg_error = page.locator('.form__error')
         self.registor_button = page.locator('[href="/register"]')
 
+    @allure.step('Заполнить учетные данные пользователя')
     def fill_user_creds(self, username: str, password: str):
-        with allure.step('Заполнить учетные данные пользователя'):
-            expect(self.username_input).to_be_visible()
-            expect(self.password_input).to_be_visible()
-            self.username_input.fill(username)
-            self.password_input.fill(password)
-            expect(self.btn_submit).to_be_visible()
-            return self
+        expect(self.username_input).to_be_visible()
+        expect(self.password_input).to_be_visible()
+        self.username_input.fill(username)
+        self.password_input.fill(password)
+        expect(self.btn_submit).to_be_visible()
+        return self
 
+    @allure.step('Проверить сообщение об ошибке')
     def expect_msg_error(self):
-        with allure.step('Проверить сообщение об ошибке'):
-            expect(self.msg_error).to_be_visible()
-            return self
+        expect(self.msg_error).to_be_visible()
+        return self
 
+    @allure.step('Нажать на кнопку "Подтвердить"')
     def click_btn_submit(self):
-        with allure.step('Нажать на кнопку "Подтвердить"'):
-            expect(self.btn_submit).to_be_visible()
-            self.btn_submit.click()
-            return self
+        expect(self.btn_submit).to_be_visible()
+        self.btn_submit.click()
+        return self
 
+    @allure.step('Нажать на кнопку "Регистрация"')
     def click_register_btn(self):
-        with allure.step('Нажать на кнопку "Регистрация"'):
-            from pages.register_page import RegisterPage
-            expect(self.registor_button).to_be_visible()
-            self.registor_button.click()
-            return RegisterPage(self.page, self.frontend_url)
+        from pages.register_page import RegisterPage
+        expect(self.registor_button).to_be_visible()
+        self.registor_button.click()
+        return RegisterPage(self.page, self.frontend_url)
 
+    @allure.step('Авторизоваться используя учетные данные пользователя')
     def log_in(self, username, password):
-        with allure.step('Авторизоваться используя учетные данные пользователя'):
-            self.fill_user_creds(username, password)
-            self.btn_submit.click()
-            return self
+        self.fill_user_creds(username, password)
+        self.btn_submit.click()
+        return self
 
+    @allure.step('Проверяем что авторизованны')
     def expect_log_in(self, envs):
-        with allure.step('Проверяем что авторизованны'):
-            expect(self.page).to_have_url(envs.main_page_url)
-            expect(self.page.get_by_text("History of Spendings")).to_be_visible()
-            return self
+        expect(self.page).to_have_url(envs.main_page_url)
+        expect(self.page.get_by_text("History of Spendings")).to_be_visible()
+        return self

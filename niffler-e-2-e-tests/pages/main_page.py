@@ -26,97 +26,97 @@ class MainPage(BasePage):
         self.profile_btn = page.locator('[href="/profile"]')
         self.menu = page.get_by_role("menu")
 
+    @allure.step('Удалить все траты UI')
     def remove_all_spends(self):
-        with allure.step('Удалить все траты UI'):
-            self.page.get_by_role("checkbox", name="select all rows").check()
-            self.page.locator('[id="delete"]').click()
-            self.page.get_by_role("button", name="Delete").click()
-            expect(self.container_history_of_spending).to_contain_text('There are no spendings')
-            return self
+        self.page.get_by_role("checkbox", name="select all rows").check()
+        self.page.locator('[id="delete"]').click()
+        self.page.get_by_role("button", name="Delete").click()
+        expect(self.container_history_of_spending).to_contain_text('There are no spendings')
+        return self
 
+    @allure.step('Удалить созданную трату')
     def delete_spend(self, name: str):
-        with allure.step('Удалить созданную трату'):
-            self.page.get_by_role("checkbox", name=name, exact=True).click()
-            self.page.locator('[id="delete"]').click()
-            self.page.get_by_role("button", name="Delete").click()
-            return self
+        self.page.get_by_role("checkbox", name=name, exact=True).click()
+        self.page.locator('[id="delete"]').click()
+        self.page.get_by_role("button", name="Delete").click()
+        return self
 
+    @allure.step('Перейти в регистрацию')
     def go_to_register(self):
-        with allure.step('Перейти в регистрацию'):
-            expect(self.register_form).to_be_visible()
-            expect(self.register_form).to_contain_text('Create new account')
-            self.register_form.click()
-            expect(self.page).to_have_url(f"{self.frontend_url}/register")
-            return RegisterPage(self.page)
+        expect(self.register_form).to_be_visible()
+        expect(self.register_form).to_contain_text('Create new account')
+        self.register_form.click()
+        expect(self.page).to_have_url(f"{self.frontend_url}/register")
+        return RegisterPage(self.page)
 
+    @allure.step('Перейти в профиль')
     def go_to_profile(self):
-        with allure.step('Перейти в профиль'):
-            self.menu_btn.click()
-            self.profile_btn.click()
-            expect(self.page).to_have_url(f"{self.frontend_url}/profile")
-            return ProfilePage(self.page)
+        self.menu_btn.click()
+        self.profile_btn.click()
+        expect(self.page).to_have_url(f"{self.frontend_url}/profile")
+        return ProfilePage(self.page)
 
+    @allure.step('Перейти в траты')
     def go_to_spend(self):
-        with allure.step('Перейти в траты'):
-            self.page.reload()
-            self.add_new_spend_btn.click()
-            expect(self.page).to_have_url(f"{self.frontend_url}/spending")
-            return SpendingPage(self.page, self.frontend_url)
+        self.page.reload()
+        self.add_new_spend_btn.click()
+        expect(self.page).to_have_url(f"{self.frontend_url}/spending")
+        return SpendingPage(self.page, self.frontend_url)
 
+    @allure.step('Проверить таблицу трат')
     def expect_expense_table(self, amount, category, description):
-        with allure.step('Проверить таблицу трат'):
-            expect(self.statistics_container).to_contain_text(f"{category} {amount}")
-            expect(self.expense_table).to_contain_text(description)
-            expect(self.expense_table).to_contain_text(amount)
-            expect(self.expense_table).to_contain_text(category)
-            return self
+        expect(self.statistics_container).to_contain_text(f"{category} {amount}")
+        expect(self.expense_table).to_contain_text(description)
+        expect(self.expense_table).to_contain_text(amount)
+        expect(self.expense_table).to_contain_text(category)
+        return self
 
+    @allure.step('Проверить данные в таблице трат')
     def expect_content_of_table(self, description: str):
-        with allure.step('Проверить данные в таблице трат'):
-            self.page.reload()
-            expect(self.expense_table).to_be_visible()
-            expect(self.expense_table).to_contain_text(description)
-            return self
+        self.page.reload()
+        expect(self.expense_table).to_be_visible()
+        expect(self.expense_table).to_contain_text(description)
+        return self
 
+    @allure.step('Проверить что в таблице трат отсутствуют данные')
     def expect_content_of_table_is_empty(self, description: str):
-        with allure.step('Проверить что в таблице трат отсутствуют данные'):
-            expect(self.container_history_of_spending).not_to_contain_text(description)
-            return self
+        expect(self.container_history_of_spending).not_to_contain_text(description)
+        return self
 
+    @allure.step('Нажать на чек-бокс с название ктегории')
     def click_on_checkbox_with_name(self, name: str):
-        with allure.step('Нажать на чек-бокс с название ктегории'):
-            self.page.get_by_role("checkbox", name=name).get_by_label("Edit spending").click()
-            return self
+        self.page.get_by_role("checkbox", name=name).get_by_label("Edit spending").click()
+        return self
 
+    @allure.step('Проверить сумму трат')
     def expect_statics_container_for_total(self, category, amount1, amount2):
-        with allure.step('Проверить сумму трат'):
-            total_amount = float(amount1) + float(amount2)
-            expect(self.statistics_container).to_contain_text(f"{category} {total_amount}")
-            return self
+        total_amount = float(amount1) + float(amount2)
+        expect(self.statistics_container).to_contain_text(f"{category} {total_amount}")
+        return self
 
+    @allure.step('Не выполнить выход из системы по кнопке Отмена')
     def dont_logout(self):
-        with allure.step('Не выполнить выход из системы по кнопке Отмена'):
-            self.menu_btn.click()
-            self.sign_out_btn.click()
-            expect(self.form_close_btn).to_be_visible()
-            self.form_close_btn.click()
-            return self
+        self.menu_btn.click()
+        self.sign_out_btn.click()
+        expect(self.form_close_btn).to_be_visible()
+        self.form_close_btn.click()
+        return self
 
+    @allure.step('Проверка, что LogOut не выполнен')
     def expect_dont_logout(self, envs):
-        with allure.step('Проверка, что LogOut не выполнен'):
-            expect(self.page).to_have_url(envs.main_page_url)
-            return self
+        expect(self.page).to_have_url(envs.main_page_url)
+        return self
 
-    def logout(self, envs):
-        with allure.step('Выполнить выход из системы по кнопке'):
-            self.menu_btn.click()
-            expect(self.menu).to_be_visible()
-            self.sign_out_btn.click()
-            self.form_logout_btn.click()
-            return self
+    @allure.step('Выполнить выход из системы по кнопке')
+    def logout(self):
+        self.menu_btn.click()
+        expect(self.menu).to_be_visible()
+        self.sign_out_btn.click()
+        self.form_logout_btn.click()
+        return self
 
+    @allure.step('Проверка выполнения выхода')
     def expect_logout(self, envs):
-        with allure.step('Проверка выполнения выхода'):
-            expect(self.page).to_have_url(envs.login_url)
-            expect(self.page.get_by_text("Log in").first).to_be_visible()
-            return self
+        expect(self.page).to_have_url(envs.login_url)
+        expect(self.page.get_by_text("Log in").first).to_be_visible()
+        return self
