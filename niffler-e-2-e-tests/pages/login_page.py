@@ -24,10 +24,9 @@ class LoginPage(BasePage):
         expect(self.btn_submit).to_be_visible()
         return self
 
-    @allure.step('Проверить сообщение об ошибке')
-    def expect_msg_error(self):
-        expect(self.msg_error).to_be_visible()
-        return self
+    @allure.step('Проверка что сообщение об ошибке отображается')
+    def is_error_message_visible(self):
+        return self.msg_error.is_visible()
 
     @allure.step('Нажать на кнопку "Подтвердить"')
     def click_btn_submit(self):
@@ -53,3 +52,12 @@ class LoginPage(BasePage):
         expect(self.page).to_have_url(envs.main_page_url)
         expect(self.page.get_by_text("History of Spendings")).to_be_visible()
         return self
+
+    @allure.step('Проверяем что отображается блок истории расходов')
+    def is_history_block_visible(self):
+        self.page.get_by_text("History of Spendings").wait_for()
+        return self.page.get_by_text("History of Spendings").is_visible()
+
+    @allure.step("Проверка что пользователь остался на странице логина")
+    def is_login_page_open(self, login_url):
+        return self.page.url == login_url

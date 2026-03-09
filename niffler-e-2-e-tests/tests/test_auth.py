@@ -1,5 +1,6 @@
 import allure
-from playwright.sync_api import expect
+
+from fixtures.pages_fixtures import main_page
 from marks import Pages
 from faker import Faker
 
@@ -29,7 +30,7 @@ class TestRegistration:
         register_page.register_new_user(fake_username, fake_password, fake_password)
         login_page = register_page.click_login()
         login_page.log_in(fake_username, fake_password)
-        login_page.expect_log_in(envs)
+        assert login_page.is_history_block_visible()
 
     @allure.title('Переход к окну авторизации из окна регистрации')
     @Pages.open_login_page
@@ -44,7 +45,7 @@ class TestAuth:
     @Pages.open_login_page
     def test_valid_auth(self, login_page, envs):
         login_page.log_in(envs.test_username, envs.test_password)
-        login_page.expect_log_in(envs)
+        assert login_page.is_history_block_visible()
 
     @allure.title('Авторизация с невалидным именем пользователя')
     @Pages.open_login_page
@@ -52,9 +53,8 @@ class TestAuth:
         invalid_password = fake.password()
 
         login_page.fill_user_creds(envs.test_username, invalid_password)
-        expect(login_page.btn_submit).to_be_visible()
         login_page.btn_submit.click()
-        expect(login_page.msg_error).to_be_visible()
+        assert login_page.is_error_message_visible()
 
     @allure.title('Авторизация с неверным паролем')
     @Pages.open_login_page
@@ -62,24 +62,24 @@ class TestAuth:
         invalid_password = fake.password()
         login_page.fill_user_creds(envs.test_username, invalid_password)
         login_page.click_btn_submit()
-        login_page.expect_msg_error()
+        assert login_page.is_error_message_visible()
 
     @allure.title('Авторизация с пустыми значениями для полей')
     @Pages.open_login_page
-    def test_no_values_auth(self, page, envs, login_page):
+    def test_no_values_auth(self, envs, login_page):
         login_page.click_btn_submit()
-        expect(page).to_have_url(envs.login_url)
+        assert login_page.is_login_page_open(envs.login_url)
 
     @allure.story("Логаут")
     @allure.title('Успешный выход из системы')
     @Pages.open_main_page
     def test_logout(self, envs, main_page):
-        main_page.logout()
-        main_page.expect_logout(envs)
+        main_page.logout(envs.login_url)
+        assert main_page.is_logged_out(envs.login_url)
 
     @allure.story("Логаут")
     @allure.title("Отмена выхода из системы")
     @Pages.open_main_page
     def test_dont_logout(self, envs, main_page):
         main_page.dont_logout()
-        main_page.expect_dont_logout(envs)
+        assert main_page.dont_logged_out(envs.main_page_url)

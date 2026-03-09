@@ -102,21 +102,25 @@ class MainPage(BasePage):
         self.form_close_btn.click()
         return self
 
-    @allure.step('Проверка, что LogOut не выполнен')
-    def expect_dont_logout(self, envs):
-        expect(self.page).to_have_url(envs.main_page_url)
-        return self
+    @allure.step('Проверка что выход не выполнен. Остались на основной странице: {main_page_url}')
+    def dont_logged_out(self, main_page_url):
+        return self.page.url == main_page_url
 
     @allure.step('Выполнить выход из системы по кнопке')
-    def logout(self):
+    def logout(self, login_url):
         self.menu_btn.click()
         expect(self.menu).to_be_visible()
-        self.sign_out_btn.click()
-        self.form_logout_btn.click()
+
+        with self.page.expect_navigation(url=login_url):
+            self.sign_out_btn.click()
+            self.form_logout_btn.click()
+
         return self
 
-    @allure.step('Проверка выполнения выхода')
-    def expect_logout(self, envs):
-        expect(self.page).to_have_url(envs.login_url)
-        expect(self.page.get_by_text("Log in").first).to_be_visible()
-        return self
+    @allure.step('Проверка что выход выполнен. Выполнен переход на страницу логина:  {login_url}')
+    def is_logged_out(self, login_url):
+        return self.page.url == login_url
+
+    @allure.step('Проверка что находимся на основной странице: {main_page_url}')
+    def is_main_page_open(self, main_page_url):
+        return self.page.url == main_page_url

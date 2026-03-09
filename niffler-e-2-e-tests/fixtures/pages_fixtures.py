@@ -62,3 +62,5 @@ def open_register_page(page: Page, envs):
 @pytest.fixture()
 def open_profile_page(page_with_auth: Page, envs):
     page_with_auth.goto(envs.profile_url)
+
+
