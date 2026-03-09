@@ -3,6 +3,7 @@ from urllib.parse import parse_qs, urlparse
 import requests
 from requests import Session
 
+
 def raise_for_status(function):
     def wrapper(*args, **kwargs):
         response = function(*args, **kwargs)
@@ -16,23 +17,10 @@ def raise_for_status(function):
 
     return wrapper
 
-# def allure_attach_request(function):
-#     """Декоратор логирования запроса и ответа в allure шаг и allure аттачмент"""
-#     def wrapper(*args, **kwargs):
-#         response = function(*args, **kwargs)
-#         try:
-#             response.raise_for_status()
-#         except requests.HTTPError as e:
-#             if response.status_code == 400:
-#                 e.add_note(response.text)
-#                 raise
-#         return response
-#
-#     return wrapper
-
 
 class BaseSession(Session):
     """Сессия с прокидыванием base_url и логированием запроса, ответа, хедеров ответа."""
+
     def __init__(self, *args, **kwargs):
         super().__init__()
         self.base_url = kwargs.pop("base_url", "")

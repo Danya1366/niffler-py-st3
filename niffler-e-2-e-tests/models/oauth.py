@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class OAuthRequest(BaseModel):
     response_type: str = "code"
     client_id: str = "client"

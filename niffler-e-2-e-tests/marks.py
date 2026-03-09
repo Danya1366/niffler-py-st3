@@ -7,7 +7,6 @@ class TestData:
 
 
 class Pages:
-
     open_main_page = pytest.mark.usefixtures("open_main_page")
     open_spending_page = pytest.mark.usefixtures("open_spending_page")
     open_profile_page = pytest.mark.usefixtures("open_profile_page")

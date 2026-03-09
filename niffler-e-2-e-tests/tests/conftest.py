@@ -25,4 +25,3 @@ def spends(request, spends_client):
     all_spend = spends_client.get_spends()
     if spend.id in [spend.id for spend in all_spend]:
         spends_client.remove_spends([spend.id])
-

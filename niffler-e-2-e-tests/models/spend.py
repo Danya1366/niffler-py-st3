@@ -1,8 +1,6 @@
 from pydantic import BaseModel
 from sqlmodel import SQLModel, Field
 
-from models.category import CategoryAdd
-
 
 class Spend(SQLModel, table=True):
     id: str = Field(default=None, primary_key=True)

@@ -2,6 +2,7 @@ import allure
 from playwright.sync_api import expect, Page
 from pages.base_page import BasePage
 
+
 class LoginPage(BasePage):
     def __init__(self, page: Page, frontend_url: str | None):
         super().__init__(page)

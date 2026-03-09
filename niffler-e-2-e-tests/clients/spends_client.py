@@ -1,5 +1,3 @@
-from urllib.parse import urljoin
-
 import allure
 import json
 
@@ -9,7 +7,7 @@ from typing import Optional, Dict
 
 from models.config import Envs
 from models.spend import Spend, SpendAdd
-from models.category import Category, CategoryAdd
+from models.category import Category
 from utils.sessions import BaseSession
 
 
@@ -20,10 +18,10 @@ class SpendsHttpClient:
     def __init__(self, envs: Envs, token: str):
         self.session = BaseSession(base_url=envs.gateway_url)
         self.session.headers.update({
-                'Accept': 'application/json',
-                'Authorization': f'Bearer {token}',
-                'Content-Type': 'application/json'
-            }
+            'Accept': 'application/json',
+            'Authorization': f'Bearer {token}',
+            'Content-Type': 'application/json'
+        }
         )
 
     def _make_request(self, method: str, url: str, data: Optional[Dict] = None,
@@ -54,7 +52,7 @@ class SpendsHttpClient:
             # self.raise_for_status(response)
             return [Category.model_validate(item) for item in response.json()]
 
-    def add_category(self,  name: str) -> Category:
+    def add_category(self, name: str) -> Category:
         response = self.session.post("/api/categories/add", json={
             "name": name
         })
@@ -67,8 +65,8 @@ class SpendsHttpClient:
             return Spend.model_validate(response.json())
 
     def get_spends(self) -> list[Spend]:
-            response = self.session.get("/api/spends/all")
-            return [Spend.model_validate(item) for item in response.json()]
+        response = self.session.get("/api/spends/all")
+        return [Spend.model_validate(item) for item in response.json()]
 
     def get_all_spendings(self) -> list[Spend]:
         with allure.step('Получить все траты по API'):
