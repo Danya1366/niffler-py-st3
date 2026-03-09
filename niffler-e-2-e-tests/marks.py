@@ -7,8 +7,9 @@ class TestData:
 
 
 class Pages:
-    main_page = pytest.mark.usefixtures("main_page")
-    open_profile_page = pytest.mark.usefixtures("open_profile_page")
-    spending_page = pytest.mark.usefixtures("spending_page")
-    open_login_page = pytest.mark.usefixtures("open_login_page")
+
+    open_main_page = pytest.mark.usefixtures("open_main_page")
     open_spending_page = pytest.mark.usefixtures("open_spending_page")
+    open_profile_page = pytest.mark.usefixtures("open_profile_page")
+    open_login_page = pytest.mark.usefixtures("open_login_page")
+    open_register_page = pytest.mark.usefixtures("open_register_page")

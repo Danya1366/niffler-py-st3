@@ -17,7 +17,7 @@ class TestSpends:
                                        TestConstants.description_to_add)
 
     @allure.title('Обновление созданной траты')
-    @Pages.main_page
+    @Pages.open_main_page
     @TestData.spends(TestSpendings.TestDataSpend)
     def test_update_spending(self, spends, envs, spending_page, main_page, clean_spendings_setup):
         main_page.expect_content_of_table(TestSpendings.description)
@@ -39,7 +39,7 @@ class TestSpends:
                                        TestConstants.description_for_delete)
 
     @allure.title('Сумма всех трат')
-    @Pages.main_page
+    @Pages.open_main_page
     @TestData.spends(TestSpendings.TestDataSpend)
     def test_total_of_spend(self, spends, envs, spending_page, main_page, clean_spendings_setup):
         main_page.go_to_spend()

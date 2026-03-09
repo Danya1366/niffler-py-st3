@@ -72,14 +72,14 @@ class TestAuth:
 
     @allure.story("Логаут")
     @allure.title('Успешный выход из системы')
-    @Pages.main_page
+    @Pages.open_main_page
     def test_logout(self, envs, main_page):
         main_page.logout(envs)
         main_page.expect_logout(envs)
 
     @allure.story("Логаут")
     @allure.title("Отмена выхода из системы")
-    @Pages.main_page
+    @Pages.open_main_page
     def test_dont_logout(self, envs, main_page):
         main_page.dont_logout()
         main_page.expect_dont_logout(envs)
