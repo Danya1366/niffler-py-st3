@@ -22,10 +22,34 @@ class OAuthClient:
         3. Получаем access_token"""
 
         self.session.get(
-            url="oauth2/authorize",
+            url="/oauth2/authorize",
             params=OAuthRequest(
                 redirect_uri=self.redirect_uri,
-                code=self.session.code
+                code_challenge=self.code_challenge
             ).model_dump(),
             allow_redirects=True
         )
+
+        self.session.post(
+            url="/login",
+            data={
+                "username": username,
+                "password": password,
+                "_csrf": self.session.cookies.get("XSRF-TOKEN")
+            },
+            allow_redirects=True
+        )
+
+        token_response = self.session.post(
+            url="/oauth2/token",
+            data={
+                "code": self.session.code,
+                "redirect_uri": self.redirect_uri,
+                "code_verifier": self.code_verifier,
+                "grant_type": "authorization_code",
+                "client_id": "client"
+            }
+        )
+
+        self.token = token_response.json().get("access_token", None)
+        return self.token

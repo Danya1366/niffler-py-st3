@@ -1,6 +1,6 @@
 import allure
 
-from conftest import main_page
+# from conftest import main_page
 from marks import Pages, TestData
 from models.enums import TestConstants, TestSpendings
 

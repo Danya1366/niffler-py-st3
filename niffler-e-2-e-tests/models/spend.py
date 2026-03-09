@@ -15,6 +15,6 @@ class Spend(SQLModel, table=True):
 class SpendAdd(BaseModel):
     amount: float
     description: str
-    category: CategoryAdd
+    category: dict
     spendDate: str
     currency: str

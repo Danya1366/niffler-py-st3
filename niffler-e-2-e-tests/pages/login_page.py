@@ -2,9 +2,8 @@ import allure
 from playwright.sync_api import expect, Page
 from pages.base_page import BasePage
 
-
 class LoginPage(BasePage):
-    def __init__(self, page: Page, frontend_url: str):
+    def __init__(self, page: Page, frontend_url: str | None):
         super().__init__(page)
         self.page = page
         self.frontend_url = frontend_url
@@ -48,7 +47,7 @@ class LoginPage(BasePage):
             self.btn_submit.click()
             return self
 
-    def expect_log_in(self,envs=None):
+    def expect_log_in(self, envs):
         with allure.step('Проверяем что авторизованны'):
             expect(self.page).to_have_url(envs.main_page_url)
             expect(self.page.get_by_text("History of Spendings")).to_be_visible()

@@ -12,14 +12,14 @@ from playwright.sync_api import Page
 
 @allure.title('Получение main page')
 @pytest.fixture()
-def main_page(page: Page, auth, envs) -> MainPage:
-    main_page = MainPage(page, envs.frontend_url)
-    return main_page
+def main_page(envs, page_with_auth) -> MainPage:
+    page_with_auth.goto(envs.frontend_url)
+    return MainPage(page_with_auth, envs.frontend_url)
 
 
 @allure.title('Получение profile page')
 @pytest.fixture()
-def profile_page(page: Page, auth, envs) -> ProfilePage:
+def profile_page(page: Page, envs) -> ProfilePage:
     profile_page = ProfilePage(page)
     return profile_page
 
@@ -33,7 +33,7 @@ def open_profile_page(profile_page, envs):
 
 @allure.title('Получение spending page')
 @pytest.fixture()
-def spending_page(page: Page, auth, envs) -> SpendingPage:
+def spending_page(page: Page, envs) -> SpendingPage:
     spending_page = SpendingPage(page, envs.frontend_url)
     return spending_page
 

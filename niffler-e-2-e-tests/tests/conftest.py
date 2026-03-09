@@ -1,14 +1,18 @@
 import allure
 import pytest
 
-from models.category import CategoryAdd
+from fixtures.client_fixtures import spends_client, spend_db
+
+pytest_plugins = [
+    "fixtures.auth_fixtures"
+]
 
 
 @allure.title('Добавление категории трат')
 @pytest.fixture(params=[])
 def category(request, spends_client, spend_db):
     category_name = request.param
-    category = spends_client.add_category(CategoryAdd(name=category_name))
+    category = spends_client.add_category(category_name)
     yield category.name
     spend_db.delete_category(category.id)
 

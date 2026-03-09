@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 class OAuthRequest(BaseModel):
     response_type: str = "code"
-    client_ide: str = "client"
+    client_id: str = "client"
     scope: str = "openid"
     redirect_uri: str
     code_challenge: str

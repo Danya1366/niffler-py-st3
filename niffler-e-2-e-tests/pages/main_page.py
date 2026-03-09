@@ -104,7 +104,7 @@ class MainPage(BasePage):
 
     def expect_dont_logout(self, envs):
         with allure.step('Проверка, что LogOut не выполнен'):
-            expect(self.page).to_have_url(envs.main_page_url)
+            expect(self.page).to_have_url(envs.frontend_url + "/")
             return self
 
     def logout(self, envs):
