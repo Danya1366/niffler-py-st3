@@ -40,13 +40,17 @@ class ProfilePage(BasePage):
         self.category_input.press("Enter")
         return self
 
+
     @allure.step('Проверяем, что категория добавлена')
-    def expect_added_category(self, category_name: str):
-        expect(self.alert_added_new_category).to_contain_text(
-            f"You've added new category: {category_name}")
-        expect(self.get_category_block_by_name(category_name)).to_be_visible()
-        expect(self.get_category_block_by_name(category_name)).to_contain_text(category_name)
-        return self
+    def is_category_added(self, category_name: str) -> bool:
+        alert_text = self.alert_added_new_category.text_content()
+        category_block = self.get_category_block_by_name(category_name)
+
+        return (
+                category_name in alert_text
+                and category_block.is_visible()
+                and category_name in category_block.text_content()
+        )
 
     @allure.step('Получить блок категория по названию')
     def get_category_block_by_name(self, category_name: str):
@@ -66,8 +70,12 @@ class ProfilePage(BasePage):
         self.name_input.click()
         self.name_input.fill(name)
         self.save_changes_btn.click()
-        expect(self.success_alert).to_be_visible()
         return self
+
+    @allure.step("Проверяем отображение аллерта")
+    def is_allert_visible(self) -> bool:
+        self.success_alert.wait_for()
+        return self.success_alert.is_visible()
 
     @allure.step('удалить Имя пользователя и проверить удаление')
     def delete_added_profile_name(self):
@@ -75,10 +83,9 @@ class ProfilePage(BasePage):
         self.page.reload()
         return self
 
-    @allure.step('Проверяем что добавленное имя удалено')
-    def expect_deleted_profile_name(self):
-        expect(self.name_input).to_be_empty()
-        return self
+    @allure.step("Проверяем, что добавленное имя удалено")
+    def is_profile_name_deleted(self) -> bool:
+        return self.name_input.input_value() == ""
 
     @allure.step('Заархивировать категорию')
     def archive_category(self, category_name: str):
@@ -87,7 +94,8 @@ class ProfilePage(BasePage):
         self.btn_archive.click()
         return self
 
+
     @allure.step('Проверяем что категория не отображается')
-    def expect_arсhive_category(self, category_name: str):
-        expect(self.get_category_block_by_name(category_name)).not_to_be_visible()
-        return self
+    def is_category_archived(self, category_name: str) -> bool:
+        self.get_category_block_by_name(category_name).wait_for(state="hidden")
+        return not self.get_category_block_by_name(category_name).is_visible()

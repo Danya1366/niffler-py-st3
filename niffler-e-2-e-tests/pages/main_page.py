@@ -3,7 +3,6 @@ from playwright.sync_api import Page, expect
 
 from pages.base_page import BasePage
 from pages.register_page import RegisterPage
-from pages.profile_page import ProfilePage
 from pages.spending_page import SpendingPage
 
 
@@ -49,13 +48,6 @@ class MainPage(BasePage):
         expect(self.page).to_have_url(f"{self.frontend_url}/register")
         return RegisterPage(self.page)
 
-    @allure.step('Перейти в профиль')
-    def go_to_profile(self):
-        self.menu_btn.click()
-        self.profile_btn.click()
-        expect(self.page).to_have_url(f"{self.frontend_url}/profile")
-        return ProfilePage(self.page)
-
     @allure.step('Перейти в траты')
     def go_to_spend(self):
         self.page.reload()
@@ -63,25 +55,30 @@ class MainPage(BasePage):
         expect(self.page).to_have_url(f"{self.frontend_url}/spending")
         return SpendingPage(self.page, self.frontend_url)
 
-    @allure.step('Проверить таблицу трат')
-    def expect_expense_table(self, amount, category, description):
-        expect(self.statistics_container).to_contain_text(f"{category} {amount}")
-        expect(self.expense_table).to_contain_text(description)
-        expect(self.expense_table).to_contain_text(amount)
-        expect(self.expense_table).to_contain_text(category)
-        return self
+    @allure.step('Проверяем статистику трат')
+    def is_statistics_correct(self, category: str, amount: str) -> bool:
+        self.page.wait_for_load_state("domcontentloaded")
+        self.statistics_container.wait_for(state="visible", timeout=10000)
+        return f"{category} {amount}" in self.statistics_container.text_content()
 
-    @allure.step('Проверить данные в таблице трат')
-    def expect_content_of_table(self, description: str):
-        self.page.reload()
-        expect(self.expense_table).to_be_visible()
-        expect(self.expense_table).to_contain_text(description)
-        return self
+    @allure.step('Проверяем описание траты')
+    def is_description_in_table(self, description: str) -> bool:
+        return description in self.expense_table.text_content()
+
+    @allure.step('Проверяем сумму траты')
+    def is_amount_in_table(self, amount: str) -> bool:
+        return amount in self.expense_table.text_content()
+
+    @allure.step('Проверяем категорию траты')
+    def is_category_in_table(self, category: str) -> bool:
+        return category in self.expense_table.text_content()
 
     @allure.step('Проверить что в таблице трат отсутствуют данные')
-    def expect_content_of_table_is_empty(self, description: str):
-        expect(self.container_history_of_spending).not_to_contain_text(description)
-        return self
+    def is_description_absent_in_table(self, description: str) -> bool:
+        self.page.wait_for_load_state()
+        self.container_history_of_spending.wait_for(state="visible", timeout=10000)
+        table_text = self.container_history_of_spending.text_content()
+        return description not in table_text
 
     @allure.step('Нажать на чек-бокс с название ктегории')
     def click_on_checkbox_with_name(self, name: str):
@@ -89,10 +86,11 @@ class MainPage(BasePage):
         return self
 
     @allure.step('Проверить сумму трат')
-    def expect_statics_container_for_total(self, category, amount1, amount2):
+    def is_total_amount_correct(self, category: str, amount1: str, amount2: str) -> bool:
         total_amount = float(amount1) + float(amount2)
-        expect(self.statistics_container).to_contain_text(f"{category} {total_amount}")
-        return self
+        self.statistics_container.wait_for(state="visible")
+        statistics_text = self.statistics_container.text_content()
+        return f"{category} {total_amount}" in statistics_text
 
     @allure.step('Не выполнить выход из системы по кнопке Отмена')
     def dont_logout(self):

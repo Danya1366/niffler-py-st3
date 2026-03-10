@@ -12,6 +12,6 @@ class TestSpendApi:
     @TestData.category(TestSpendings.TEST_CATEGORY_1)
     @TestData.spends(TestSpendings.TestDataSpend)
     def test_spending_should_be_deleted(self, category, spends, main_page):
-        main_page.expect_content_of_table(TestSpendings.description)
+        assert main_page.is_description_in_table(TestSpendings.description)
         main_page.delete_spend(TestSpendings.TEST_CATEGORY_1)
-        main_page.expect_content_of_table_is_empty(TestSpendings.description)
+        assert main_page.is_description_absent_in_table(TestSpendings.description)

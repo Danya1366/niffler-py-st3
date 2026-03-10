@@ -66,4 +66,5 @@ class SpendingPage(BasePage):
     def click_save_btn(self, envs):
         self.btn_save.click()
         expect(self.page).to_have_url(envs.main_page_url)
+        self.page.wait_for_load_state()
         return self
