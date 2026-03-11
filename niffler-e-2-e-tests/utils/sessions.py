@@ -31,7 +31,7 @@ class BaseSession(Session):
         return super().request(method, self.base_url + url, **kwargs)
 
 
-class AuthSession(Session):
+class AuthSession(BaseSession):
     """Сессия с прокидыванием base_url и логированием запроса, ответа, хедеров ответа.
     + Автосохранение cookies внутри сессии из каждого response и redirect response, и 'code'."""
 
@@ -51,5 +51,4 @@ class AuthSession(Session):
             code = parse_qs(urlparse(r.headers.get("Location")).query).get("code", None)
             if code:
                 self.code = code
-        response.raise_for_status()
         return response
