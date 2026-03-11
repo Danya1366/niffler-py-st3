@@ -26,16 +26,11 @@ class TestRegistration:
         fake_username = fake.name()
         fake_password = fake.password()
 
-        with allure.step("Переход на страницу регистрации"):
-            login_page.click_register_btn()
-        with allure.step("Регистрация нового пользователя"):
-            register_page.register_new_user(fake_username, fake_password, fake_password)
-        with allure.step("Переход на страницу логина"):
-            login_page = register_page.click_login()
-        with allure.step("Авторизация после регистрации"):
-            login_page.log_in(fake_username, fake_password)
-        with allure.step("Проверка успешной авторизации"):
-            assert login_page.is_history_block_visible()
+        login_page.click_register_btn()
+        register_page.register_new_user(fake_username, fake_password, fake_password)
+        login_page = register_page.click_login()
+        login_page.log_in(fake_username, fake_password)
+        assert login_page.is_history_block_visible()
 
 
 @allure.feature('Авторизация')
