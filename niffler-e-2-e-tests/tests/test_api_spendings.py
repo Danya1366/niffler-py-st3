@@ -12,6 +12,9 @@ class TestSpendApi:
     @TestData.category(TestSpendings.TEST_CATEGORY_1)
     @TestData.spends(TestSpendings.TestDataSpend)
     def test_spending_should_be_deleted(self, category, spends, main_page):
-        assert main_page.is_description_in_table(TestSpendings.description)
-        main_page.delete_spend(TestSpendings.TEST_CATEGORY_1)
-        assert main_page.is_description_absent_in_table(TestSpendings.description)
+        with allure.step('Проверить, что трата отображается в таблице'):
+            assert main_page.is_description_in_table(TestSpendings.description)
+        with allure.step('Удалить трату через UI'):
+            main_page.delete_spend(TestSpendings.TEST_CATEGORY_1)
+        with allure.step('Проверить что трата больше не отображается'):
+            assert main_page.is_description_absent_in_table(TestSpendings.description)
