@@ -43,56 +43,45 @@ class TestAuth:
     @allure.title('Авторизация с валидными данными')
     @Pages.open_login_page
     def test_valid_auth(self, login_page, envs):
-        with allure.step("Авторизация пользователя"):
-            login_page.log_in(envs.test_username, envs.test_password)
-        with allure.step("Проверка успешной авторизации"):
-            assert login_page.is_history_block_visible()
+        login_page.log_in(envs.test_username, envs.test_password)
+        assert login_page.is_history_block_visible()
 
     @allure.title('Авторизация с невалидным именем пользователя')
     @Pages.open_login_page
     def test_invalid_username_auth(self, envs, login_page):
         invalid_username = fake.password()
-        with allure.step("Ввод невалидного username и валидного password"):
-            login_page.fill_user_creds(invalid_username, envs.test_password)
-        with allure.step("Отправка формы авторизации"):
-            login_page.btn_submit.click()
-        with allure.step("Проверка сообщения об ошибке"):
-            assert login_page.is_error_message_visible()
+        login_page.fill_user_creds(invalid_username, envs.test_password)
+        login_page.btn_submit.click()
+        assert login_page.is_error_message_visible()
 
-    @allure.title('Авторизация с неверным паролем')
-    @Pages.open_login_page
-    def test_invalid_password_auth(self, envs, login_page):
-        invalid_password = fake.password()
 
-        with allure.step("Ввод валидного username и невалидного password"):
-            login_page.fill_user_creds(envs.test_username, invalid_password)
-        with allure.step("Отправка формы авторизации"):
-            login_page.click_btn_submit()
-        with allure.step("Проверка сообщения об ошибке"):
-            assert login_page.is_error_message_visible()
+@allure.title('Авторизация с неверным паролем')
+@Pages.open_login_page
+def test_invalid_password_auth(envs, login_page):
+    invalid_password = fake.password()
+    login_page.fill_user_creds(envs.test_username, invalid_password)
+    login_page.click_btn_submit()
+    assert login_page.is_error_message_visible()
 
-    @allure.title('Авторизация с пустыми значениями для полей')
-    @Pages.open_login_page
-    def test_no_values_auth(self, envs, login_page):
-        with allure.step("Отправка формы авторизации без заполнения полей"):
-            login_page.click_btn_submit()
-        with allure.step("Проверка что пользователь остался на странице логина"):
-            assert login_page.is_login_page_open(envs.login_url)
 
-    @allure.story("Логаут")
-    @allure.title('Успешный выход из системы')
-    @Pages.open_main_page
-    def test_logout(self, envs, main_page):
-        with allure.step("Выполнить выход из системы"):
-            main_page.logout(envs.login_url)
-        with allure.step("Проверить что пользователь разлогинен"):
-            assert main_page.is_logged_out(envs.login_url)
+@allure.title('Авторизация с пустыми значениями для полей')
+@Pages.open_login_page
+def test_no_values_auth(envs, login_page):
+    login_page.click_btn_submit()
+    assert login_page.is_login_page_open(envs.login_url)
 
-    @allure.story("Логаут")
-    @allure.title("Отмена выхода из системы")
-    @Pages.open_main_page
-    def test_dont_logout(self, envs, main_page):
-        with allure.step("Нажать logout и отменить выход"):
-            main_page.dont_logout()
-        with allure.step("Проверить что пользователь остался на главной странице"):
-            assert main_page.dont_logged_out(envs.main_page_url)
+
+@allure.story("Логаут")
+@allure.title('Успешный выход из системы')
+@Pages.open_main_page
+def test_logout(envs, main_page):
+    main_page.logout(envs.login_url)
+    assert main_page.is_logged_out(envs.login_url)
+
+
+@allure.story("Логаут")
+@allure.title("Отмена выхода из системы")
+@Pages.open_main_page
+def test_dont_logout(envs, main_page):
+    main_page.dont_logout()
+    assert main_page.dont_logged_out(envs.main_page_url)

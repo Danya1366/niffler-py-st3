@@ -64,25 +64,20 @@ class TestSpends:
     @allure.title('Сумма всех трат')
     @Pages.open_main_page
     def test_total_of_spend(self, spending_page, main_page, clean_spendings_setup):
-        with allure.step('Переходим на страницу трат'):
-            main_page.go_to_spend()
-        with allure.step('Добавить первую трату'):
-            spending_page.add_new_spending(
-                TestConstants.amount1,
-                TestConstants.TEST_CATEGORY_1,
-                TestConstants.description
-            )
-        with allure.step('Переходим на страницу трат'):
-            main_page.go_to_spend()
-        with allure.step('Добавить вторую трату'):
-            spending_page.add_new_spending(
-                TestConstants.amount2,
-                TestConstants.TEST_CATEGORY_1,
-                TestConstants.description
-            )
-        with allure.step('Проверить сумму трат'):
-            assert main_page.is_total_amount_correct(
-                TestConstants.TEST_CATEGORY_1,
-                TestConstants.amount1,
-                TestConstants.amount2
-            )
+        main_page.go_to_spend()
+        spending_page.add_new_spending(
+            TestConstants.amount1,
+            TestConstants.TEST_CATEGORY_1,
+            TestConstants.description
+        )
+        main_page.go_to_spend()
+        spending_page.add_new_spending(
+            TestConstants.amount2,
+            TestConstants.TEST_CATEGORY_1,
+            TestConstants.description
+        )
+        assert main_page.is_total_amount_correct(
+            TestConstants.TEST_CATEGORY_1,
+            TestConstants.amount1,
+            TestConstants.amount2
+        )
