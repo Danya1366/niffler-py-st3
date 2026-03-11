@@ -28,7 +28,7 @@ class TestSpends:
     @allure.title('Обновление созданной траты')
     @Pages.open_main_page
     @TestData.spends(TestSpendings.TestDataSpend)
-    def test_update_spending(self, spends, envs, spending_page, main_page, clean_spendings_setup):
+    def test_update_spending(self, spends, envs, spending_page, main_page):
         with allure.step('Проверить отсутствие старых трат'):
             assert main_page.is_description_absent_in_table(TestConstants.description)
         with allure.step('Открыть трату и изменить данные'):
@@ -61,11 +61,17 @@ class TestSpends:
         with allure.step('Проверить что таблица трат пуста'):
             assert main_page.is_description_absent_in_table(TestConstants.description_for_delete)
 
-
     @allure.title('Сумма всех трат')
     @Pages.open_main_page
-    @TestData.spends(TestSpendings.TestDataSpend)
-    def test_total_of_spend(self, spends, envs, spending_page, main_page, clean_spendings_setup):
+    def test_total_of_spend(self, spending_page, main_page, clean_spendings_setup):
+        with allure.step('Переходим на страницу трат'):
+            main_page.go_to_spend()
+        with allure.step('Добавить первую трату'):
+            spending_page.add_new_spending(
+                TestConstants.amount1,
+                TestConstants.TEST_CATEGORY_1,
+                TestConstants.description
+            )
         with allure.step('Переходим на страницу трат'):
             main_page.go_to_spend()
         with allure.step('Добавить вторую трату'):

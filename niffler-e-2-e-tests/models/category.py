@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from sqlmodel import SQLModel, Field
 
 
-class Category(SQLModel, table=True):
+class CategorySQL(SQLModel, table=True):
     __tablename__ = "category"
     id: str = Field(default=None, primary_key=True)
     name: str

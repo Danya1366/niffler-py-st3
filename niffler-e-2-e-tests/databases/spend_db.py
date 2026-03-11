@@ -6,7 +6,7 @@ from allure_commons.types import AttachmentType
 from sqlalchemy import create_engine, Engine, event
 from sqlmodel import Session, select
 
-from models.category import Category
+from models.category import CategorySQL
 from models.config import Envs
 
 
@@ -23,14 +23,14 @@ class SpendDb:
         name = statement.split(" ")[0] + " " + context.engine.url.database
         allure.attach(statement_with_params, name=name, attachment_type=AttachmentType.TEXT)
 
-    def get_user_categories(self, username: str) -> Sequence[Category]:
+    def get_user_categories(self, username: str) -> Sequence[CategorySQL]:
         with Session(self.engine) as session:
-            statement = select(Category).where(Category.username == username)
+            statement = select(CategorySQL).where(CategorySQL.username == username)
             return session.exec(statement).all()
 
-    def add_user_category(self, username: str, category_name: str) -> Category:
+    def add_user_category(self, username: str, category_name: str) -> CategorySQL:
         with Session(self.engine) as session:
-            new_category = Category(
+            new_category = CategorySQL(
                 id=str(uuid.uuid4()),
                 name=category_name,
                 username=username
@@ -44,19 +44,19 @@ class SpendDb:
 
     def delete_category(self, category_id: str):
         with Session(self.engine) as session:
-            category = session.get(Category, category_id)
+            category = session.get(CategorySQL, category_id)
             session.delete(category)
             session.commit()
 
-    def get_category_by_name(self, username: str, category_name: str) -> Category:
+    def get_category_by_name(self, username: str, category_name: str) -> CategorySQL:
         with Session(self.engine) as session:
-            category = select(Category).where(
-                Category.username == username,
-                Category.name == category_name
+            category = select(CategorySQL).where(
+                CategorySQL.username == username,
+                CategorySQL.name == category_name
             )
             return session.exec(category).first()
 
-    def get_category_by_id(self, category_id: str) -> Category:
+    def get_category_by_id(self, category_id: str) -> CategorySQL:
         with Session(self.engine) as session:
-            category = select(Category).where(Category.id == category_id)
+            category = select(CategorySQL).where(CategorySQL.id == category_id)
             return session.exec(category).first()

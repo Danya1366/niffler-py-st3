@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from utils.datatime_util import get_past_date_iso
 
 
 @dataclass
@@ -49,3 +50,36 @@ class TestConstants:
 class UserCreds:
     name = "test user"
     edited_name = "edited username"
+
+@dataclass
+class Currency:
+    RUB = "RUB"
+    KZT = "KZT"
+    EUR = "EUR"
+    USD = "USD"
+
+@dataclass
+class DataSpends:
+    data_spend = {
+        "amount": 101.1,
+        "description": "test_description",
+        "category": {
+            "name": TestConstants.TEST_CATEGORY
+        },
+        "spendDate": get_past_date_iso(),
+        "currency": Currency.RUB
+    }
+
+class CurrencyData:
+    currency_data = {
+        Currency.RUB: {"amount": 1000.50, "description": "Трата в рублях"},
+        Currency.USD: {"amount": 100.75, "description": "Трата в долларах"},
+        Currency.EUR: {"amount": 90.25, "description": "Трата в евро"},
+        Currency.KZT: {"amount": 50000.00, "description": "Трата в тенге"}
+    }
+
+class SpendEditData:
+    new_amount = 231
+    new_description = "Зарплата"
+    new_currency = Currency.EUR
+

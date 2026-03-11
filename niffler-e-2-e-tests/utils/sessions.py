@@ -36,15 +36,14 @@ class AuthSession(BaseSession):
     + Автосохранение cookies внутри сессии из каждого response и redirect response, и 'code'."""
 
     def __init__(self, *args, **kwargs):
-        super().__init__()
-        self.base_url = kwargs.pop("base_url", "")
+        super().__init__(*args, **kwargs)
         self.code = None
 
     @raise_for_status
     def request(self, method, url, **kwargs):
         """Сохраняем все куки из редиректа и сохраняем code авторизации из redirect_uri
         и используем в дальнейшем в последующих запросах этой сессии"""
-        response = super().request(method, self.base_url + url, **kwargs)
+        response = super().request(method, url, **kwargs)
         for r in response.history:
             cookies = r.cookies.get_dict()
             self.cookies.update(cookies)

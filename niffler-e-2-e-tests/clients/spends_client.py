@@ -1,13 +1,13 @@
 import allure
-import json
+from allure import step
 
 import requests
 from playwright.sync_api import APIResponse
 from typing import Optional, Dict
 
 from models.config import Envs
-from models.spend import Spend, SpendAdd
-from models.category import Category
+from models.spend import Spend, SpendAdd, SpendEdit
+from models.category import CategorySQL
 from utils.sessions import BaseSession
 
 
@@ -24,39 +24,22 @@ class SpendsHttpClient:
         }
         )
 
-    def _make_request(self, method: str, url: str, data: Optional[Dict] = None,
-                      params: Optional[Dict] = None) -> APIResponse:
-        # Логируем запрос
-        if data:
-            allure.attach(json.dumps(data, indent=2), name="Request body", attachment_type=allure.attachment_type.JSON)
-        if params:
-            allure.attach(json.dumps(params, indent=2), name="Request params",
-                          attachment_type=allure.attachment_type.JSON)
-
-        # Выполняем запрос
-        kwargs = {k: v for k, v in [('data', data and json.dumps(data)),
-                                    ('params', params)] if v}
-        response = getattr(self.session, method.lower())(url, **kwargs)
-
-        # Логируем ответ
-        allure.attach(f"Method: {method.upper()}\nURL: {response.url}\nStatus: {response.status}",
-                      name="Response Info",
-                      attachment_type=allure.attachment_type.TEXT)
-        allure.attach(response.text(), name="Response Body", attachment_type=allure.attachment_type.TEXT)
-
-        return response
-
-    def get_categories(self) -> list[Category]:
+    def get_categories(self) -> list[CategorySQL]:
         with allure.step('оплучить категорию трат по API'):
             response = self.session.get("/api/categories/all")
-            # self.raise_for_status(response)
-            return [Category.model_validate(item) for item in response.json()]
+            return [CategorySQL.model_validate(item) for item in response.json()]
 
-    def add_category(self, name: str) -> Category:
+    def add_category(self, name: str) -> CategorySQL:
         response = self.session.post("/api/categories/add", json={
             "name": name
         })
-        return Category.model_validate(response.json())
+        return CategorySQL.model_validate(response.json())
+
+    def edit_category(self, category):
+        category_data = CategorySQL.model_validate(category)
+        response = self.session.patch("/api/categories/update", json=category_data.model_dump())
+        response.raise_for_status()
+        return CategorySQL.model_validate(response.json())
 
     def add_spends(self, spend: SpendAdd) -> Spend:
         with allure.step('Добавить трату по API'):
@@ -71,14 +54,12 @@ class SpendsHttpClient:
     def get_all_spendings(self) -> list[Spend]:
         with allure.step('Получить все траты по API'):
             response = self.session.get("/api/v2/spends/all")
-            # self.raise_for_status(response)
             return [Spend.model_validate(item) for item in response.json()["content"]]
 
     def remove_spends(self, ids: list[str]):
         with allure.step('Удалить трату по API'):
-            ids_param = ",".join(ids)
-            response = self.session.delete("/api/spends/remove", params={"ids": ids_param})
-            # self.raise_for_status(response)
+            response = self.session.delete("/api/spends/remove", params={"ids": ids})
+            return response
 
     def delete_all_spendings(self):
         with allure.step('Удалить все траты по API, если они есть'):
@@ -87,7 +68,14 @@ class SpendsHttpClient:
             if spending_ids:
                 self.remove_spends(spending_ids)
 
-    # @staticmethod
-    # def raise_for_status(response: APIResponse):
-    #     if not response.ok:
-    #         raise Exception(f"{response.status_code}")
+    def edit_spend(self, edit_spend: SpendEdit) -> Spend:
+        response = self.session.patch("/api/spends/edit", data=edit_spend.model_dump_json())
+        print(response.json())
+        return Spend.model_validate(response.json())
+
+    @step("Отправить запрос на редактирование категории")
+    def edit_category(self, category):
+        category_data = CategorySQL.model_validate(category)
+        response = self.session.patch("/api/categories/update", json=category_data.model_dump())
+        response.raise_for_status()
+        return CategorySQL.model_validate(response.json())
