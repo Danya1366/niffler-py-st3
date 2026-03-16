@@ -11,5 +11,7 @@ class Envs(BaseModel):
     main_page_url: str
     login_url: str
     spend_db_url: str
+    auth_db_url: str
     test_username: str
     test_password: str
+    kafka_address: str

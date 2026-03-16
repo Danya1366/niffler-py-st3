@@ -4,7 +4,8 @@ import pytest
 from fixtures.client_fixtures import spends_client, spend_db
 
 pytest_plugins = [
-    "fixtures.auth_fixtures"
+    "fixtures.auth_fixtures",
+    "fixtures.client_fixtures"
 ]
 
 

@@ -17,6 +17,8 @@ dependencies = [
     "curlify (>=3.0.0,<4.0.0)",
     "pkce (>=1.0.3,<2.0.0)",
     "radon (>=6.0.1,<7.0.0)",
+    "grpcio-tools (>=1.78.0,<2.0.0)",
+    "confluent-kafka (>=2.13.2,<3.0.0)",
 ]
 
 
