@@ -15,3 +15,4 @@ class Envs(BaseModel):
     test_username: str
     test_password: str
     kafka_address: str
+    soap_address: str
