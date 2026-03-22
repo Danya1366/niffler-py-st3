@@ -1,6 +1,6 @@
 import allure
 import pytest
-from models.enums import Currency, TestConstants, DataSpends, CurrencyData, SpendEditData
+from models.enums import Currency, Constants, DataSpends, CurrencyData, SpendEditData
 from models.spend import SpendEdit
 from utils.api_assertions import assertEqual, assertNotIn
 from utils.datatime_util import get_past_date_iso
@@ -40,7 +40,7 @@ class TestSpendsApi:
                               spendDate=get_past_date_iso(),
                               amount=SpendEditData.new_amount,
                               category={
-                                  "name": TestConstants.TEST_CATEGORY
+                                  "name": Constants.TEST_CATEGORY
                               },
                               description=SpendEditData.new_description,
                               currency=SpendEditData.new_currency)
@@ -69,7 +69,7 @@ class TestSpendsApi:
             "amount": amount,
             "description": description,
             "category": {
-                "name": TestConstants.TEST_CATEGORY
+                "name": Constants.TEST_CATEGORY
             },
             "spendDate": get_past_date_iso(),
             "currency": currency_str

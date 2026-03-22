@@ -16,6 +16,29 @@ from pages.login_page import LoginPage
 
 pytest_plugins = ["fixtures.auth_fixtures", "fixtures.client_fixtures", "fixtures.pages_fixtures"]
 
+@allure.title('Получаем переменные окружения')
+@pytest.fixture(scope="session")
+def envs() -> Envs:
+    load_dotenv()
+    envs_instance = Envs(
+        frontend_url=os.getenv("FRONTEND_URL"),
+        gateway_url=os.getenv("GATEWAY_URL"),
+        auth_url=os.getenv("AUTH_URL"),
+        login_url=os.getenv("LOGIN_URL"),
+        register_url=os.getenv("REGISTER_URL"),
+        profile_url=os.getenv("PROFILE_URL"),
+        spending_url=os.getenv("SPENDING_URL"),
+        main_page_url=os.getenv("MAIN_PAGE_URL"),
+        spend_db_url=os.getenv("SPEND_DB_URL"),
+        auth_db_url=os.getenv("AUTH_DB_URL"),
+        test_password=os.getenv("TEST_PASSWORD"),
+        test_username=os.getenv("TEST_USERNAME"),
+        kafka_address=os.getenv("KAFKA_ADDRESS"),
+        soap_address=os.getenv("SOAP_ADDRESS")
+    )
+    allure.attach(envs_instance.model_dump_json(indent=2), name="envs.json", attachment_type=AttachmentType.JSON)
+    return envs_instance
+
 
 def allure_logger(config) -> AllureReporter:
     listener: AllureListener = config.pluginmanager.get_plugin("allure_listener")
@@ -39,28 +62,6 @@ def pytest_runtest_teardown(item):
     test.labels = list(filter(lambda x: x.name not in ("suite", "subSuite", "parentSuite"), test.labels))
 
 
-@allure.title('Получаем переменные окружения')
-@pytest.fixture(scope="session")
-def envs() -> Envs:
-    load_dotenv()
-    envs_instance = Envs(
-        frontend_url=os.getenv("FRONTEND_URL"),
-        gateway_url=os.getenv("GATEWAY_URL"),
-        auth_url=os.getenv("AUTH_URL"),
-        login_url=os.getenv("LOGIN_URL"),
-        register_url=os.getenv("REGISTER_URL"),
-        profile_url=os.getenv("PROFILE_URL"),
-        spending_url=os.getenv("SPENDING_URL"),
-        main_page_url=os.getenv("MAIN_PAGE_URL"),
-        spend_db_url=os.getenv("SPEND_DB_URL"),
-        auth_db_url=os.getenv("AUTH_DB_URL"),
-        test_password=os.getenv("TEST_PASSWORD"),
-        test_username=os.getenv("TEST_USERNAME"),
-        kafka_address=os.getenv("KAFKA_ADDRESS"),
-        soap_address=os.getenv("SOAP_ADDRESS")
-    )
-    allure.attach(envs_instance.model_dump_json(indent=2), name="envs.json", attachment_type=AttachmentType.JSON)
-    return envs_instance
 
 
 @pytest.fixture(scope="session", autouse=True)

@@ -1,7 +1,7 @@
 import allure
 
 from marks import Pages, TestData
-from models.enums import TestSpendings
+from models.enums import Spendings
 from fixtures.pages_fixtures import main_page
 
 
@@ -9,9 +9,9 @@ from fixtures.pages_fixtures import main_page
 class TestSpendApi:
     @allure.title('Добавляем новую трату по апи и удаляем через ui')
     @Pages.open_main_page
-    @TestData.category(TestSpendings.TEST_CATEGORY_1)
-    @TestData.spends(TestSpendings.TestDataSpend)
+    @TestData.category(Spendings.TEST_CATEGORY_1)
+    @TestData.spends(Spendings.TestDataSpend)
     def test_spending_should_be_deleted(self, category, spends, main_page):
-            assert main_page.is_description_in_table(TestSpendings.description)
-            main_page.delete_spend(TestSpendings.TEST_CATEGORY_1)
-            assert main_page.is_description_absent_in_table(TestSpendings.description)
+            assert main_page.is_description_in_table(Spendings.description)
+            main_page.delete_spend(Spendings.TEST_CATEGORY_1)
+            assert main_page.is_description_absent_in_table(Spendings.description)
