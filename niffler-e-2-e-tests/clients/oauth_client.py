@@ -14,6 +14,7 @@ class OAuthClient:
         self.session = AuthSession(base_url=env.auth_url)
         self.redirect_uri = env.frontend_url + "/authorized"
         self.code_verifier, self.code_challenge = pkce.generate_pkce_pair()
+        self.token = None
 
     def get_token(self, username, password):
         """Возвращает token oauth для авторизации пользователя с юзернейм
@@ -53,3 +54,24 @@ class OAuthClient:
 
         self.token = token_response.json().get("access_token", None)
         return self.token
+
+    def register(self, username, password):
+        self.session.get(
+            url='/register',
+            params={
+                "redirect_uri": self.redirect_uri,
+            },
+            allow_redirects=True
+        )
+
+        r = self.session.post(
+            url='/register',
+            data={
+                "username": username,
+                "password": password,
+                "passwordSubmit": password,
+                "_csrf": self.session.cookies.get("XSRF-TOKEN")
+            },
+            allow_redirects=True
+        )
+        return r

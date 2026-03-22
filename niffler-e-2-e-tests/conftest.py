@@ -7,6 +7,8 @@ from allure_commons.types import AttachmentType
 from allure_pytest.listener import AllureListener
 from pytest import FixtureDef, FixtureRequest
 from playwright.sync_api import Browser
+
+from clients.kafka_client import KafkaClient
 from models.config import Envs
 from dotenv import load_dotenv
 from pages.login_page import LoginPage
@@ -52,8 +54,10 @@ def envs() -> Envs:
         spending_url=os.getenv("SPENDING_URL"),
         main_page_url=os.getenv("MAIN_PAGE_URL"),
         spend_db_url=os.getenv("SPEND_DB_URL"),
+        auth_db_url=os.getenv("AUTH_DB_URL"),
         test_password=os.getenv("TEST_PASSWORD"),
-        test_username=os.getenv("TEST_USERNAME")
+        test_username=os.getenv("TEST_USERNAME"),
+        kafka_address=os.getenv("KAFKA_ADDRESS")
     )
     allure.attach(envs_instance.model_dump_json(indent=2), name="envs.json", attachment_type=AttachmentType.JSON)
     return envs_instance
@@ -96,3 +100,10 @@ def clean_spendings_setup(spends_client):
     yield
 
     spends_client.delete_all_spendings()
+
+
+@pytest.fixture(scope="session")
+def kafka(envs):
+    """Взаимодействие с Kafka"""
+    with KafkaClient(envs) as k:
+        yield k

@@ -8,6 +8,7 @@ fake = Faker()
 
 
 @allure.feature('Регистрация')
+@allure.story('UI')
 class TestRegistration:
     @allure.title('Не валидный submit password при регистрации')
     @Pages.open_login_page
