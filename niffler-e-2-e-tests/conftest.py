@@ -2,6 +2,7 @@ import os
 
 import allure
 import pytest
+import requests
 from allure_commons.reporter import AllureReporter
 from allure_commons.types import AttachmentType
 from allure_pytest.listener import AllureListener
@@ -12,6 +13,7 @@ from clients.kafka_client import KafkaClient
 from models.config import Envs
 from dotenv import load_dotenv
 from pages.login_page import LoginPage
+from utils.sessions import BaseSession
 
 pytest_plugins = [
     "fixtures.pages_fixtures"
@@ -57,7 +59,8 @@ def envs() -> Envs:
         auth_db_url=os.getenv("AUTH_DB_URL"),
         test_password=os.getenv("TEST_PASSWORD"),
         test_username=os.getenv("TEST_USERNAME"),
-        kafka_address=os.getenv("KAFKA_ADDRESS")
+        kafka_address=os.getenv("KAFKA_ADDRESS"),
+        soap_address=os.getenv("SOAP_ADDRESS")
     )
     allure.attach(envs_instance.model_dump_json(indent=2), name="envs.json", attachment_type=AttachmentType.JSON)
     return envs_instance
@@ -107,3 +110,12 @@ def kafka(envs):
     """Взаимодействие с Kafka"""
     with KafkaClient(envs) as k:
         yield k
+
+@pytest.fixture(scope='module')
+def soap_session(envs):
+    session = requests.Session()
+    session.base_url = envs.soap_address
+    session.headers.update({
+        "Content-Type": "text/xml; charset=utf-8"
+    })
+    return session
