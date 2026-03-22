@@ -3,6 +3,8 @@ from urllib.parse import parse_qs, urlparse
 import requests
 from requests import Session
 
+from utils.allure_helpers import allure_attach_request
+
 
 def raise_for_status(function):
     def wrapper(*args, **kwargs):
@@ -26,6 +28,7 @@ class BaseSession(Session):
         self.base_url = kwargs.pop("base_url", "")
 
     @raise_for_status
+    @allure_attach_request
     def request(self, method, url, **kwargs):
         """Логирование запроса и вклейка base_url."""
         return super().request(method, self.base_url + url, **kwargs)
