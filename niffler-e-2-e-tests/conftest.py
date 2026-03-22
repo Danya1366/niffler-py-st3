@@ -13,11 +13,8 @@ from clients.kafka_client import KafkaClient
 from models.config import Envs
 from dotenv import load_dotenv
 from pages.login_page import LoginPage
-from utils.sessions import BaseSession
 
-pytest_plugins = [
-    "fixtures.pages_fixtures"
-]
+pytest_plugins = ["fixtures.auth_fixtures", "fixtures.client_fixtures", "fixtures.pages_fixtures"]
 
 
 def allure_logger(config) -> AllureReporter:
@@ -66,6 +63,14 @@ def envs() -> Envs:
     return envs_instance
 
 
+@pytest.fixture(scope="session", autouse=True)
+def create_test_user_before_run(auth_client, envs):
+    try:
+        auth_client.register(username=envs.test_username, password=envs.test_password)
+    except Exception as err:
+        print(f"User exists: {err}")
+
+
 @pytest.fixture(scope="session")
 def setup_auth_state(browser: Browser, envs, tmp_path_factory):
     """Автоматически создает файл с состоянием авторизации перед всеми тестами"""
@@ -110,6 +115,7 @@ def kafka(envs):
     """Взаимодействие с Kafka"""
     with KafkaClient(envs) as k:
         yield k
+
 
 @pytest.fixture(scope='module')
 def soap_session(envs):
