@@ -60,7 +60,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.13'
           cache: 'pip'
 
       - name: Install Poetry
@@ -68,17 +68,17 @@ jobs:
           curl -sSL https://install.python-poetry.org | python3 -
           echo "$HOME/.local/bin" >> $GITHUB_PATH
       - name: Install dependencies
-        working-directory: ./niffler-e-2-e-tests-python
+        working-directory: ./niffler-e-2-e-tests
         run: |
           poetry install --no-interaction --no-root
       - name: Install Playwright browsers
-        working-directory: ./niffler-e-2-e-tests-python
+        working-directory: ./niffler-e-2-e-tests
         run: |
           poetry run playwright install chromium
           poetry run playwright install-deps
       - name: Run tests
         id: tests
-        working-directory: ./niffler-e-2-e-tests-python
+        working-directory: ./niffler-e-2-e-tests
         timeout-minutes: 1
         run: |
           set +e
@@ -90,7 +90,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: pytest-logs
-          path: niffler-e-2-e-tests-python/logs/
+          path: niffler-e-2-e-tests/logs/
           retention-days: 7
 
       - name: Upload Allure results
@@ -98,15 +98,15 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: allure-results
-          path: niffler-e-2-e-tests-python/allure-results/
+          path: niffler-e-2-e-tests/allure-results/
           retention-days: 7
 
       - name: Generate Allure Report
         if: always()
         uses: simple-elf/allure-report-action@master
         with:
-          allure_results: niffler-e-2-e-tests-python/allure-results
-          allure_report: niffler-e-2-e-tests-python/allure-report
+          allure_results: niffler-e-2-e-tests/allure-results
+          allure_report: niffler-e-2-e-tests/allure-report
           keep_reports: 20
 
       - name: Deploy Allure Report to GitHub Pages
@@ -115,7 +115,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: niffler-e-2-e-tests-python/allure-report
+          publish_dir: niffler-e-2-e-tests/allure-report
           keep_files: true
 
       - name: Upload Allure Report
@@ -123,7 +123,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
-          path: niffler-e-2-e-tests-python/allure-report/
+          path: niffler-e-2-e-tests/allure-report/
           retention-days: 7
 
       - name: Add comment to PR
