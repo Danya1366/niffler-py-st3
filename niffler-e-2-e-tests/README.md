@@ -21,7 +21,7 @@ java -version
 В корне проекта (niffler-py-st3)
 
 ```posh
-% bash docker-compose-dev.sh
+bash docker-compose-dev.sh
 ```
 
 Установка зависимостей Python Переход в папку с E2E тестами
