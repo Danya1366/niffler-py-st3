@@ -1,0 +1,2 @@
+LOGIN_URL from env: http://auth.niffler.dc:9000/login
+User exists: HTTPConnectionPool(host='auth.niffler.dc', port=9000): Max retries exceeded with url: /register?redirect_uri=http%3A%2F%2Ffrontend.niffler.dc%2Fauthorized (Caused by NewConnectionError("HTTPConnection(host='auth.niffler.dc', port=9000): Failed to establish a new connection: [Errno 111] Connection refused"))
