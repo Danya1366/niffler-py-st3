@@ -13,9 +13,9 @@
             <xs:sequence>
                 <xs:element ref="ns2:id"/>
                 <xs:element ref="ns2:username"/>
-                <xs:element ref="ns2:fullname"/>
-                <xs:element ref="ns2:currency"/>
-                <xs:element ref="ns2:friendshipStatus"/>
+                <xs:element ref="ns2:fullname" minOccurs="0"/>
+                <xs:element ref="ns2:currency" minOccurs="0"/>
+                <xs:element ref="ns2:friendshipStatus" minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

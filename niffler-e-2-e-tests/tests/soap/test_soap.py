@@ -16,8 +16,6 @@ class TestSoap:
             soap_session.base_url,
             data=user_iso_soap_xml('qa_guru')
         )
-        assert user_iso_soap_xml
-        print(response.text)
         assert response.status_code == 200
         try:
             xsd_response('userResponse').validate(response.text)
