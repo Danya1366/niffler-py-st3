@@ -1,0 +1,1 @@
+DELETE FROM category WHERE category.id = 8e9494f5-8005-4c02-97ca-2b6df0feeee1
