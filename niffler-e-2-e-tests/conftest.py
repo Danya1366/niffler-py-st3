@@ -1,5 +1,4 @@
 import os
-
 import allure
 import pytest
 import requests
@@ -8,24 +7,17 @@ from allure_commons.types import AttachmentType
 from allure_pytest.listener import AllureListener
 from pytest import FixtureDef, FixtureRequest
 from playwright.sync_api import Browser
-
 from clients.kafka_client import KafkaClient
 from models.config import Envs
 from dotenv import load_dotenv
 from pages.login_page import LoginPage
-
-from pathlib import Path
 
 pytest_plugins = ["fixtures.auth_fixtures", "fixtures.client_fixtures", "fixtures.pages_fixtures"]
 
 @allure.title('Получаем переменные окружения')
 @pytest.fixture(scope="session")
 def envs() -> Envs:
-    env_path = Path(__file__).parent / '.env'
-    load_dotenv(dotenv_path=env_path)
-
-    print(f"LOGIN_URL from env: {os.getenv('LOGIN_URL')}")
-
+    load_dotenv()
     envs_instance = Envs(
         frontend_url=os.getenv("FRONTEND_URL"),
         gateway_url=os.getenv("GATEWAY_URL"),

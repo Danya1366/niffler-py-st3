@@ -33,4 +33,5 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.group.dev.dependencies]
 faker = "^38.2.0"
 flake8 = "^7.3.0"
+pytest-playwright = "^0.7.2"
 
