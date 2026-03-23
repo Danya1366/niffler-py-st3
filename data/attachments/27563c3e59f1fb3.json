@@ -1,0 +1,14 @@
+{
+    "id": "c0f82651-434a-4ef1-9dc8-fce19f73a865",
+    "spendDate": "2026-03-16T15:43:49.012+00:00",
+    "category": {
+        "id": "b2084f0f-c9a3-4dda-8230-4bd6d7243358",
+        "name": "school",
+        "username": "qa_guru",
+        "archived": false
+    },
+    "currency": "KZT",
+    "amount": 50000.0,
+    "description": "\u0422\u0440\u0430\u0442\u0430 \u0432 \u0442\u0435\u043d\u0433\u0435",
+    "username": "qa_guru"
+}

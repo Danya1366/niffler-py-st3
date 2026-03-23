@@ -1,0 +1,14 @@
+{
+    "id": "8cee7f29-c8f3-44a3-93d3-0cf90caa7070",
+    "spendDate": "2026-03-16T15:43:45.269+00:00",
+    "category": {
+        "id": "2be6f8a4-7186-49ae-821e-6ed76623c9e3",
+        "name": "school",
+        "username": "qa_guru",
+        "archived": false
+    },
+    "currency": "RUB",
+    "amount": 101.1,
+    "description": "test_description",
+    "username": "qa_guru"
+}

@@ -1,0 +1,1 @@
+{'id': 'ae8e7d38-ad7c-484e-96bc-fe1ed35f4721', 'spendDate': '2026-03-16T15:43:48.532+00:00', 'category': {'id': 'e900b47f-00fc-4fef-9c52-f596e8a07487', 'name': 'school', 'username': 'qa_guru', 'archived': False}, 'currency': 'EUR', 'amount': 231.0, 'description': 'Зарплата', 'username': 'qa_guru'}
