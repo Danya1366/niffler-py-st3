@@ -210,18 +210,18 @@ services:
 #    networks:
 #      - niffler-network
 
-  allure-ui:
-    profiles: [ test ]
-    container_name: allure-ui
-    image: frankescobar/allure-docker-service-ui:7.0.3
-    depends_on:
-      - allure
-    environment:
-      - ALLURE_DOCKER_PUBLIC_API_URL=http://localhost:5050
-    ports:
-      - 5252:5252
-    networks:
-      - niffler-network
+#  allure-ui:
+#    profiles: [ test ]
+#    container_name: allure-ui
+#    image: frankescobar/allure-docker-service-ui:7.0.3
+#    depends_on:
+#      - allure
+#    environment:
+#      - ALLURE_DOCKER_PUBLIC_API_URL=http://localhost:5050
+#    ports:
+#      - 5252:5252
+#    networks:
+#      - niffler-network
 
 networks:
   niffler-network:
