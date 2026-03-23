@@ -1,5 +1,7 @@
 # niffler-e-2-e-tests
 
+тестовый коммит 
+
 End-to-end tests for Niffler.
 
 Установка и запуск (Mac OS)
