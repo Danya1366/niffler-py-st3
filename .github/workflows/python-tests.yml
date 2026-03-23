@@ -36,18 +36,20 @@ jobs:
         run: |
           cat > .env << EOF
           AUTH_URL=http://auth.niffler.dc:9000
-          FRONT_URL=http://frontend.niffler.dc
-          API_URL=http://gateway.niffler.dc:8090
+          FRONTEND_URL=http://frontend.niffler.dc
+          GATEWAY_URL=http://gateway.niffler.dc:8090
+          REGISTER_URL=http://frontend.niffler.dc/register
+          PROFILE_URL=http://frontend.niffler.dc/profile
+          SPENDING_URL=http://frontend.niffler.dc/spending
+          MAIN_PAGE_URL=http://frontend.niffler.dc/main
+          LOGIN_URL=http://auth.niffler.dc:9000/login
           SPEND_DB_URL=postgresql+psycopg2://postgres:secret@localhost:5432/niffler-spend
-          USER_DB_URL=postgresql+psycopg2://postgres:secret@localhost:5432/niffler-userdata
+          AUTH_DB_URL=postgresql+psycopg2://postgres:secret@localhost:5432/niffler-auth
           KAFKA_ADDRESS=localhost:9093
-          SOAP_URL=http://localhost:8089/ws/userdata
-          NIFFLER_USER=$TEST_USERNAME
-          NIFFLER_PASSWORD=$TEST_PASSWORD
+          SOAP_ADDRESS=http://localhost:8089/ws
+          TEST_USERNAME=$TEST_USERNAME
+          TEST_PASSWORD=$TEST_PASSWORD
           EOF
-          
-          echo "=== Content of .env file ==="
-          cat .env
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
