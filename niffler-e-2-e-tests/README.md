@@ -1,5 +1,7 @@
 # niffler-e-2-e-tests
 
+тестовый коммит 
+
 End-to-end tests for Niffler.
 
 Установка и запуск (Mac OS)
@@ -21,7 +23,7 @@ java -version
 В корне проекта (niffler-py-st3)
 
 ```posh
-% bash docker-compose-dev.sh
+bash docker-compose-dev.sh
 ```
 
 Установка зависимостей Python Переход в папку с E2E тестами

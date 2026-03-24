@@ -8,7 +8,7 @@ class Category:
 
 
 @dataclass
-class TestSpendings:
+class Spendings:
     TEST_CATEGORY_1 = "категория 1"
     description = "QA>GURU Python Advanced 6"
 
@@ -24,7 +24,7 @@ class TestSpendings:
 
 
 @dataclass
-class TestConstants:
+class Constants:
     TEST_CATEGORY_1 = "категория 1"
     TEST_CATEGORY = "school"
     TEST_CATEGORY_BD = "test_category_bd"
@@ -64,7 +64,7 @@ class DataSpends:
         "amount": 101.1,
         "description": "test_description",
         "category": {
-            "name": TestConstants.TEST_CATEGORY
+            "name": Constants.TEST_CATEGORY
         },
         "spendDate": get_past_date_iso(),
         "currency": Currency.RUB

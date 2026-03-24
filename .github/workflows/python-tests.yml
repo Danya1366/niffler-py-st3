@@ -1,0 +1,181 @@
+name: Python E2E Tests
+
+on:
+  pull_request:
+    types: [ opened, reopened, synchronize ]
+
+jobs:
+  python-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PROFILE: docker
+      COMPOSE_PROFILES: test
+      PREFIX: qaguru
+      ARCH: amd64
+      BUILD_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
+      TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get commit message
+        run: |
+          MSG=$(git log -1 --no-merges --pretty=format:%s ${{ github.event.pull_request.head.sha }})
+          echo "HEAD_COMMIT_MESSAGE=$MSG" >> $GITHUB_ENV
+      - name: Pull Chrome for Selenoid
+        run: |
+          docker pull selenoid/vnc_chrome:127.0
+      - name: Create .env file for tests
+        working-directory: ./niffler-e-2-e-tests
+        run: |
+          cat > .env << EOF
+          FRONTEND_URL=http://frontend.niffler.dc
+          GATEWAY_URL=http://gateway.niffler.dc:8090
+          AUTH_URL=http://auth.niffler.dc:9000
+          LOGIN_URL=http://auth.niffler.dc:9000/login
+          REGISTER_URL=http://frontend.niffler.dc/register
+          PROFILE_URL=http://frontend.niffler.dc/profile
+          SPENDING_URL=http://frontend.niffler.dc/spending
+          MAIN_PAGE_URL=http://frontend.niffler.dc/main
+          SPEND_DB_URL=postgresql+psycopg2://postgres:secret@localhost:5432/niffler-spend
+          AUTH_DB_URL=postgresql+psycopg2://postgres:secret@localhost:5432/niffler-auth
+          KAFKA_ADDRESS=localhost:9093
+          SOAP_ADDRESS=http://localhost:8089/ws
+          TEST_USERNAME=$TEST_USERNAME
+          TEST_PASSWORD=$TEST_PASSWORD
+          EOF
+
+          echo "=== Content of .env file ==="
+          cat .env
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Start docker compose services
+        run: |
+          bash docker-compose-dev.sh
+
+      - name: Add hosts entries
+        run: |
+          echo "127.0.0.1 auth.niffler.dc" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 frontend.niffler.dc" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 gateway.niffler.dc" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 userdata.niffler.dc" | sudo tee -a /etc/hosts
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+      - name: Install dependencies
+        working-directory: ./niffler-e-2-e-tests
+        run: |
+          poetry install --no-interaction --no-root
+      - name: Install Playwright browsers
+        working-directory: ./niffler-e-2-e-tests
+        run: |
+          poetry run playwright install chromium
+          poetry run playwright install-deps
+      - name: Run tests
+        id: tests
+        working-directory: ./niffler-e-2-e-tests
+        timeout-minutes: 1
+        run: |
+          set +e
+          mkdir -p allure-results
+          poetry run pytest --alluredir=allure-results -vv
+          echo "exit_code=$?" >> $GITHUB_OUTPUT
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-logs
+          path: niffler-e-2-e-tests/logs/
+          retention-days: 7
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: niffler-e-2-e-tests/allure-results/
+          retention-days: 7
+
+      - name: Generate Allure Report
+        if: always()
+        uses: simple-elf/allure-report-action@master
+        with:
+          allure_results: niffler-e-2-e-tests/allure-results
+          allure_report: niffler-e-2-e-tests/allure-report
+          keep_reports: 20
+
+      - name: Deploy Allure Report to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: niffler-e-2-e-tests/allure-report
+          keep_files: true
+
+      - name: Upload Allure Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: niffler-e-2-e-tests/allure-report/
+          retention-days: 7
+
+      - name: Add comment to PR
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const commitMsg = process.env.HEAD_COMMIT_MESSAGE;
+            const buildUrl = process.env.BUILD_URL;
+            const exitCode = '${{ steps.tests.outputs.exit_code }}';
+            
+            // Сообщение в зависимости от результата
+            let status_symbol = exitCode === '0' ? '✅' : '❌';
+            let status_text = exitCode === '0' ? 'PASSED' : 'FAILED';
+            
+            // Ссылка на артефакты с отчетом
+            const artifactsUrl = `${buildUrl}#artifacts`;
+            
+            let message = `${status_symbol} **Python E2E Tests ${status_text}** ${status_symbol}\n\n`;
+            message += `🔗 [View Workflow Run](${buildUrl})\n`;
+            message += `📝 Last commit: ${commitMsg}\n\n`;
+            message += `📊 [Download Allure Report](${artifactsUrl})\n`;
+            message += `(Allure report available as artifact in the workflow run)`;
+            
+            if (exitCode !== '0') {
+              message += `\n\n⚠️ Some tests failed. Check the Allure report for details.`;
+            }
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });
+      - name: Docker compose logs
+        if: always()
+        run: |
+          docker compose logs || true
+      - name: Stop containers
+        if: always()
+        run: |
+          docker compose down -v || true
