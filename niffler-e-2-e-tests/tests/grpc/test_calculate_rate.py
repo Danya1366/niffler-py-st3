@@ -51,7 +51,6 @@ class TestGrpc:
         )
         assert response.calculatedAmount == expected_result, f"Expected {expected_result}"
 
-
     @allure.title('Обмен валюты из KZT в USD, с отрицательным значением')
     def test_currency_exchange_negative_amount(self, grpc_client: NifflerCurrencyServiceClient):
         response = grpc_client.calculate_rate(
