@@ -1,0 +1,16 @@
+[
+    {
+        "id": "6c26a0c0-8376-4e25-bce1-e3df1bd9ad96",
+        "spendDate": "2026-03-28T21:00:00.000+00:00",
+        "category": {
+            "id": "1a0a91ea-2ffc-4669-b58f-9ab904ca9d51",
+            "name": "new category",
+            "username": "qa_guru",
+            "archived": false
+        },
+        "currency": "RUB",
+        "amount": 100.0,
+        "description": "\u0432\u0447\u0435\u0440\u0430\u0448\u043d\u0438\u0435 \u0442\u0440\u0430\u0442\u044b",
+        "username": "qa_guru"
+    }
+]
