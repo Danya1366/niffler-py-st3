@@ -1,6 +1,6 @@
 import allure
 from playwright.sync_api import Page, expect
-from datetime import datetime, timedelta
+from utils.datatime_util import get_past_date_str
 
 from pages.base_page import BasePage
 
@@ -17,8 +17,7 @@ class SpendingPage(BasePage):
         self.description_field = page.locator('input[name="description"]')
         self.btn_save = page.locator('#save')
 
-        yesterday = datetime.now() - timedelta(days=1)
-        self.yesterday_day = str(yesterday.day)
+        self.yesterday_day = get_past_date_str()
 
     @allure.step('Добавить описание')
     def add_description(self, description: str):
