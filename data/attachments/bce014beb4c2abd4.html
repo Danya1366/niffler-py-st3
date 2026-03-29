@@ -1,0 +1,80 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset = UTF-8">
+    <script src="https://yastatic.net/jquery/2.2.3/jquery.min.js" crossorigin="anonymous"></script>
+
+    <link href="https://yastatic.net/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="https://yastatic.net/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <link type="text/css" href="https://yandex.st/highlightjs/8.0/styles/github.min.css" rel="stylesheet"/>
+    <script type="text/javascript" src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+    <script type="text/javascript" src="https://yandex.st/highlightjs/8.0/languages/bash.min.js"></script>
+    <script type="text/javascript" src="https://yandex.st/highlightjs/8.0/languages/json.min.js"></script>
+    <script type="text/javascript" src="https://yandex.st/highlightjs/8.0/languages/xml.min.js"></script>
+    <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+
+    <style>
+        pre {
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <pre><code>PATCH to http://gateway.niffler.dc:8090/api/spends/edit</code></pre>
+</div>
+
+
+    <h4>Body</h4>
+    <div>
+        <pre><code>{"id":"0feb4cd6-00d1-4e79-9e8c-f7c1f86d04d7","amount":231.0,"description":"Зарплата","category":{"name":"school"},"spendDate":"2026-03-22T22:54:11.377657Z","currency":"EUR"}</code></pre>
+    </div>
+
+
+
+
+    <h4>Headers</h4>
+    <div>
+    
+        <div>
+            <pre><code><b>User-Agent</b>: python-requests/2.32.5</code></pre>
+        </div>
+    
+        <div>
+            <pre><code><b>Accept-Encoding</b>: gzip, deflate</code></pre>
+        </div>
+    
+        <div>
+            <pre><code><b>Accept</b>: application/json</code></pre>
+        </div>
+    
+        <div>
+            <pre><code><b>Connection</b>: keep-alive</code></pre>
+        </div>
+    
+        <div>
+            <pre><code><b>Authorization</b>: Bearer eyJraWQiOiI4YjI1NzNmOS1jZDJhLTQ1YzgtYjM4Ni0yMzQ0N2U3MTZlOWYiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJxYV9ndXJ1IiwiYXVkIjoiY2xpZW50IiwibmJmIjoxNzc0ODI0ODQ5LCJzY29wZSI6WyJvcGVuaWQiXSwiaXNzIjoiaHR0cDovL2F1dGgubmlmZmxlci5kYzo5MDAwIiwiZXhwIjoxNzc0ODI4NDQ5LCJpYXQiOjE3NzQ4MjQ4NDksImp0aSI6IjBiNWZkZDU4LTNkMWQtNDI1Yy04MDFhLTY3MmVmZDk2ZjljNSJ9.t4L9Rbu579jH1wpPCJs8GOv3Y5T3aPPslSPBIqm5m1F10qrvQdRW2q6gw3pMqm_bvzQKZ-P8fFMroaKk-JYMXLKICBSHnQ9NBouQRawyweB2x43ztm-iSM7ZnlTElGlg6xUVWRC_YPoQac7R_A9A_fZUQNJ0RWyxzh9v-yOfpwu4nIlU3AAR8yhX5SxXbDz7EM-UVcTKF6Q-1zYeiO-0zUYtOouuwO5Qs6dz4aIRVWwd0AU63Fci_XITtFsmeX9PAcWm2B6aDGf1kH4l0hT2EEd0LthfA0S4dptGN4Ue8J3kv-rvxJUOWtXKPDXvM6QiqyJOTOkeeach4ICLAZcsEA</code></pre>
+        </div>
+    
+        <div>
+            <pre><code><b>Content-Type</b>: application/json</code></pre>
+        </div>
+    
+        <div>
+            <pre><code><b>Content-Length</b>: 181</code></pre>
+        </div>
+    
+    </div>
+
+
+
+
+
+
+    <h4>Curl</h4>
+    <div>
+        <pre><code>curl -X PATCH -H 'User-Agent: python-requests/2.32.5' -H 'Accept-Encoding: gzip, deflate' -H 'Accept: application/json' -H 'Connection: keep-alive' -H 'Authorization: Bearer eyJraWQiOiI4YjI1NzNmOS1jZDJhLTQ1YzgtYjM4Ni0yMzQ0N2U3MTZlOWYiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJxYV9ndXJ1IiwiYXVkIjoiY2xpZW50IiwibmJmIjoxNzc0ODI0ODQ5LCJzY29wZSI6WyJvcGVuaWQiXSwiaXNzIjoiaHR0cDovL2F1dGgubmlmZmxlci5kYzo5MDAwIiwiZXhwIjoxNzc0ODI4NDQ5LCJpYXQiOjE3NzQ4MjQ4NDksImp0aSI6IjBiNWZkZDU4LTNkMWQtNDI1Yy04MDFhLTY3MmVmZDk2ZjljNSJ9.t4L9Rbu579jH1wpPCJs8GOv3Y5T3aPPslSPBIqm5m1F10qrvQdRW2q6gw3pMqm_bvzQKZ-P8fFMroaKk-JYMXLKICBSHnQ9NBouQRawyweB2x43ztm-iSM7ZnlTElGlg6xUVWRC_YPoQac7R_A9A_fZUQNJ0RWyxzh9v-yOfpwu4nIlU3AAR8yhX5SxXbDz7EM-UVcTKF6Q-1zYeiO-0zUYtOouuwO5Qs6dz4aIRVWwd0AU63Fci_XITtFsmeX9PAcWm2B6aDGf1kH4l0hT2EEd0LthfA0S4dptGN4Ue8J3kv-rvxJUOWtXKPDXvM6QiqyJOTOkeeach4ICLAZcsEA' -H 'Content-Type: application/json' -H 'Content-Length: 181' -d '{"id":"0feb4cd6-00d1-4e79-9e8c-f7c1f86d04d7","amount":231.0,"description":"Зарплата","category":{"name":"school"},"spendDate":"2026-03-22T22:54:11.377657Z","currency":"EUR"}' http://gateway.niffler.dc:8090/api/spends/edit</code></pre>
+    </div>
+
+</body>
+</html>

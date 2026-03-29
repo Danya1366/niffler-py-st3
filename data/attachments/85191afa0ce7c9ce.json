@@ -1,0 +1,14 @@
+{
+    "id": "0feb4cd6-00d1-4e79-9e8c-f7c1f86d04d7",
+    "spendDate": "2026-03-22T22:54:11.377+00:00",
+    "category": {
+        "id": "2250cd43-e557-4eae-8ce6-b7e55972098c",
+        "name": "school",
+        "username": "qa_guru",
+        "archived": false
+    },
+    "currency": "EUR",
+    "amount": 231.0,
+    "description": "\u0417\u0430\u0440\u043f\u043b\u0430\u0442\u0430",
+    "username": "qa_guru"
+}
