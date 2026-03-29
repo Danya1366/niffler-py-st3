@@ -9,7 +9,7 @@ It provides strongly-typed sync gRPC clients that follow the "duck typing" princ
 
 import grpc
 
-from internal.pb.niffler_currency_pb2 import (
+from grpc_proto.internal.pb.niffler_currency_pb2 import (
     CurrencyResponse,
     CalculateRequest,
     CalculateResponse,

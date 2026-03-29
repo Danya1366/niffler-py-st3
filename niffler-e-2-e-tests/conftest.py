@@ -2,24 +2,19 @@ import os
 import allure
 import pytest
 import requests
-import grpc
+
 from allure_commons.reporter import AllureReporter
 from allure_commons.types import AttachmentType
 from allure_pytest.listener import AllureListener
 from pytest import FixtureDef, FixtureRequest
 from playwright.sync_api import Browser
 from clients.kafka_client import KafkaClient
-from internal.grpc.interceptors.allure import AllureInterceptor
-from internal.grpc.interceptors.logging import LoggingInterceptor
 from models.config import Envs
 from dotenv import load_dotenv
 from pages.login_page import LoginPage
 
-from grpc import insecure_channel
-
-from internal.pb.niffler_currency_pb2_pbreflect import NifflerCurrencyServiceClient
-
-pytest_plugins = ["fixtures.auth_fixtures", "fixtures.client_fixtures", "fixtures.pages_fixtures"]
+pytest_plugins = ["fixtures.auth_fixtures", "fixtures.client_fixtures", "fixtures.pages_fixtures",
+                  "fixtures.grpc_fixtures"]
 
 
 @allure.title('Получаем переменные окружения')
@@ -130,18 +125,3 @@ def soap_session(envs):
         "Content-Type": "text/xml; charset=utf-8"
     })
     return session
-
-
-INTERCEPTORS = [
-    LoggingInterceptor(),
-    AllureInterceptor()
-]
-
-
-@pytest.fixture(scope="session")
-def grpc_client() -> NifflerCurrencyServiceClient:
-    channel = insecure_channel("localhost:8092")
-    intercepted_channel = grpc.intercept_channel(channel,
-                                                 *INTERCEPTORS
-                                                 )
-    return NifflerCurrencyServiceClient(intercepted_channel)
