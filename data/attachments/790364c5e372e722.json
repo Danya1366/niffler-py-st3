@@ -1,0 +1,16 @@
+[
+    {
+        "id": "a38d4412-c003-460a-bfa0-e70ca0ea6028",
+        "spendDate": "2024-08-07T21:00:00.000+00:00",
+        "category": {
+            "id": "c41b41d7-868f-45ac-80ef-558215a66dbd",
+            "name": "\u0422\u0435\u0441\u0442\u043e\u0432\u0430\u044f \u0434\u043b\u044f \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0438 \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u0439",
+            "username": "qa_guru",
+            "archived": false
+        },
+        "currency": "RUB",
+        "amount": 200.03,
+        "description": "\u0422\u0435\u0441\u0442",
+        "username": "qa_guru"
+    }
+]
