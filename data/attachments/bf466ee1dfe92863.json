@@ -1,0 +1,14 @@
+{
+    "id": "0aa2c6c5-3d90-49a4-a3df-fa8a02ef3666",
+    "spendDate": "2024-08-08T18:39:27.955+00:00",
+    "category": {
+        "id": "a9a796b0-7e33-40df-b7d3-2677fd911937",
+        "name": "\u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f 1",
+        "username": "qa_guru",
+        "archived": false
+    },
+    "currency": "RUB",
+    "amount": 108.51,
+    "description": "QA>GURU Python Advanced 6",
+    "username": "qa_guru"
+}
