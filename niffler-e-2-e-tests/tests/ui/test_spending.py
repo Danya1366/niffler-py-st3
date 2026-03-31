@@ -6,6 +6,7 @@ from models.enums import Constants, Spendings
 
 
 @allure.feature('Траты')
+@allure.story('API + UI')
 @pytest.mark.xdist_group("group2")
 class TestSpends:
     @allure.title('Добавление новой траты за вчерашний день')
@@ -78,6 +79,7 @@ class TestSpends:
 
 
 @allure.feature('Добавление траты по api')
+@allure.story('API + UI')
 @pytest.mark.xdist_group("group2")
 class TestSpendApi:
     @allure.title('Добавляем новую трату по апи и удаляем через ui')

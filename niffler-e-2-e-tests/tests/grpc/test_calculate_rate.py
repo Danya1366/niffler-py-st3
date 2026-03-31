@@ -7,7 +7,7 @@ from grpc_proto.internal.pb.niffler_currency_pb2_pbreflect import NifflerCurrenc
 
 
 @allure.feature('Обмен валюты')
-@allure.story('grpc')
+@allure.story('GRPC')
 class TestGrpc:
     @allure.title('Обмен валюты из EUR в RUB')
     def test_calculate_rate(self, grpc_client: NifflerCurrencyServiceClient) -> None:

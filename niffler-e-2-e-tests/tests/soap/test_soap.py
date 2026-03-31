@@ -1,5 +1,4 @@
 import allure
-import pytest
 
 from faker import Faker
 from xmlschema import XMLSchemaChildrenValidationError
@@ -8,10 +7,10 @@ from utils.soap import check_result_operation, check_result_update_operation
 
 fake = Faker("ru_RU")
 
-
+@allure.feature('Профиль пользователя')
 @allure.feature('SOAP')
 class TestSoap:
-
+    @allure.title('Получение информации о пользователе')
     def test_niffler(self, soap_session):
         response = soap_session.post(
             soap_session.base_url,
@@ -25,8 +24,8 @@ class TestSoap:
 
         assert check_result_operation(response.text, 'qa_guru')
 
+    @allure.title('Изменение информации о пользователе')
     def test_update_user_data(self, soap_session):
-
         fullname = fake.name()
 
         response = soap_session.post(

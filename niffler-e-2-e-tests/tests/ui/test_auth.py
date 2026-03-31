@@ -7,8 +7,8 @@ from faker import Faker
 fake = Faker()
 
 
-@allure.feature('UI')
-@allure.story('Регистрация')
+@allure.feature('Регистрация')
+@allure.story('UI')
 class TestRegistration:
     @allure.title('Не валидный submit password при регистрации')
     @Pages.open_login_page
@@ -34,9 +34,8 @@ class TestRegistration:
         assert login_page.is_history_block_visible()
 
 
-# @pytest.mark.xdist_group("group1")
-@allure.feature('UI')
-@allure.story('Авторизация')
+@allure.feature('Авторизация')
+@allure.story('UI')
 class TestAuth:
     @allure.title('Авторизация с валидными данными')
     @Pages.open_login_page
@@ -53,9 +52,8 @@ class TestAuth:
         assert login_page.is_error_message_visible()
 
 
-# @pytest.mark.xdist_group("group1")
-@allure.feature('UI')
-@allure.story('Не валидная авторизация')
+@allure.feature('Не валидная авторизация')
+@allure.story('UI')
 class TestInvalidAuth:
     @allure.title('Авторизация с неверным паролем')
     @Pages.open_login_page
@@ -72,8 +70,8 @@ class TestInvalidAuth:
         assert login_page.is_login_page_open(envs.login_url)
 
 
-@allure.feature('UI')
-@allure.story('Выход из системы')
+@allure.feature('Выход из системы')
+@allure.story('UI')
 class TestLogout:
     @allure.title('Успешный выход из системы')
     @Pages.open_main_page

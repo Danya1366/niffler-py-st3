@@ -1,8 +1,12 @@
 import allure
 from playwright.sync_api import Page, expect
 from utils.datatime_util import get_past_date_str
+from datetime import date, timedelta
+
 
 from pages.base_page import BasePage
+yesterday = date.today() - timedelta(days=1)
+
 
 
 class SpendingPage(BasePage):
@@ -17,7 +21,8 @@ class SpendingPage(BasePage):
         self.description_field = page.locator('input[name="description"]')
         self.btn_save = page.locator('#save')
 
-        self.yesterday_day = get_past_date_str()
+        self.date_input = page.get_by_placeholder("MM/DD/YYYY")
+        self.date_str = yesterday.strftime("%m/%d/%Y")
 
     @allure.step('Добавить описание')
     def add_description(self, description: str):
@@ -57,9 +62,7 @@ class SpendingPage(BasePage):
         self.category_input_field.fill(category)
         self.description_field.fill(description)
         self.calendar_icon.wait_for(state="visible")
-        self.calendar_icon.click()
-        self.page.get_by_role("gridcell", name=str(self.yesterday_day), exact=True).click()
-        return self
+        self.date_input.fill(self.date_str)
 
     @allure.step('Нажать на кнопку "Сохранить"')
     def click_save_btn(self, envs):

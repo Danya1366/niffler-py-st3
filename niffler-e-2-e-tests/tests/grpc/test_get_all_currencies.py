@@ -5,8 +5,8 @@ from grpc_proto.internal.pb.niffler_currency_pb2_pbreflect import NifflerCurrenc
 from google.protobuf import empty_pb2
 
 
-@allure.feature('Вся валюта')
-@allure.story('grpc')
+@allure.feature('Перевод валюты')
+@allure.story('GRPC')
 class TestGrpcAllCurrencies:
     @allure.title('Получение всех доступных валют')
     def test_get_all_currencies(self, grpc_client: NifflerCurrencyServiceClient) -> None:
