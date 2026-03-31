@@ -1,0 +1,1 @@
+INSERT INTO category (id, name, username, archived) VALUES (7b572ab4-f9f5-46fc-9013-58f9a72b630f, test_category_bd, qa_guru, False)
