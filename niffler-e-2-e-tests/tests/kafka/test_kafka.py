@@ -5,7 +5,7 @@ import requests
 
 from faker import Faker
 
-from conftest import kafka
+from fixtures.kafka_fixtures import kafka
 from models.user import UserName
 
 from allure import step

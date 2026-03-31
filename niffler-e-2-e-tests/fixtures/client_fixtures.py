@@ -17,5 +17,5 @@ def spend_db(envs) -> SpendDb:
 
 
 @pytest.fixture(scope="session")
-def auth_db(envs):
+def auth_db(envs) -> AuthDb:
     return AuthDb(envs)

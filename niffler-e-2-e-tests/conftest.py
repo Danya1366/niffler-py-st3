@@ -1,20 +1,18 @@
 import os
 import allure
 import pytest
-import requests
 
 from allure_commons.reporter import AllureReporter
 from allure_commons.types import AttachmentType
 from allure_pytest.listener import AllureListener
 from pytest import FixtureDef, FixtureRequest
 from playwright.sync_api import Browser
-from clients.kafka_client import KafkaClient
 from models.config import Envs
 from dotenv import load_dotenv
 from pages.login_page import LoginPage
 
 pytest_plugins = ["fixtures.auth_fixtures", "fixtures.client_fixtures", "fixtures.pages_fixtures",
-                  "fixtures.grpc_fixtures"]
+                  "fixtures.grpc_fixtures", "fixtures.soap_fixtures", "fixtures.kafka_fixtures"]
 
 
 @allure.title('Получаем переменные окружения')
@@ -106,22 +104,6 @@ def page_with_auth(browser: Browser, setup_auth_state):
 @pytest.fixture(scope="function")
 def clean_spendings_setup(spends_client):
     yield
-
     spends_client.delete_all_spendings()
 
 
-@pytest.fixture(scope="session")
-def kafka(envs):
-    """Взаимодействие с Kafka"""
-    with KafkaClient(envs) as k:
-        yield k
-
-
-@pytest.fixture(scope='module')
-def soap_session(envs):
-    session = requests.Session()
-    session.base_url = envs.soap_address
-    session.headers.update({
-        "Content-Type": "text/xml; charset=utf-8"
-    })
-    return session

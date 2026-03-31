@@ -1,8 +1,8 @@
 import allure
 from playwright.sync_api import Page, expect
 
+from conftest import page_with_auth
 from pages.base_page import BasePage
-from pages.register_page import RegisterPage
 from pages.spending_page import SpendingPage
 
 
@@ -35,18 +35,19 @@ class MainPage(BasePage):
 
     @allure.step('Удалить созданную трату')
     def delete_spend(self, name: str):
+        self.wait_for_load()
         self.page.get_by_role("checkbox", name=name, exact=True).click()
         self.page.locator('[id="delete"]').click()
         self.page.get_by_role("button", name="Delete").click()
         return self
 
-    @allure.step('Перейти в регистрацию')
-    def go_to_register(self):
-        expect(self.register_form).to_be_visible()
-        expect(self.register_form).to_contain_text('Create new account')
-        self.register_form.click()
-        expect(self.page).to_have_url(f"{self.frontend_url}/register")
-        return RegisterPage(self.page)
+    # @allure.step('Перейти в регистрацию')
+    # def go_to_register(self):
+    #     expect(self.register_form).to_be_visible()
+    #     expect(self.register_form).to_contain_text('Create new account')
+    #     self.register_form.click()
+    #     expect(self.page).to_have_url(f"{self.frontend_url}/register")
+    #     return RegisterPage(self.page)
 
     @allure.step('Перейти в траты')
     def go_to_spend(self):
@@ -63,6 +64,8 @@ class MainPage(BasePage):
 
     @allure.step('Проверяем описание траты')
     def is_description_in_table(self, description: str) -> bool:
+        self.page.reload()
+        self.wait_for_load()
         return description in self.expense_table.text_content()
 
     @allure.step('Проверяем сумму траты')
@@ -75,8 +78,9 @@ class MainPage(BasePage):
 
     @allure.step('Проверить что в таблице трат отсутствуют данные')
     def is_description_absent_in_table(self, description: str) -> bool:
-        self.page.wait_for_load_state()
+        self.wait_for_load()
         self.container_history_of_spending.wait_for(state="visible", timeout=10000)
+        assert self.container_history_of_spending.is_visible()
         table_text = self.container_history_of_spending.text_content()
         return description not in table_text
 

@@ -73,3 +73,15 @@ class TestSpends:
             Constants.amount1,
             Constants.amount2
         )
+
+
+@allure.feature('Добавление траты по api')
+class TestSpendApi:
+    @allure.title('Добавляем новую трату по апи и удаляем через ui')
+    @Pages.open_main_page
+    @TestData.category(Spendings.TEST_CATEGORY_2)
+    @TestData.spends(Spendings.TestDataSpend_1)
+    def test_spending_should_be_deleted(self, category, spends, main_page):
+        assert main_page.is_description_in_table(Spendings.description)
+        main_page.delete_spend(Spendings.TEST_CATEGORY_2)
+        assert main_page.is_description_absent_in_table(Spendings.description)

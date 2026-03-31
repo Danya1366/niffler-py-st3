@@ -1,3 +1,4 @@
+import pytest
 import allure
 
 from fixtures.pages_fixtures import main_page
@@ -7,8 +8,9 @@ from faker import Faker
 fake = Faker()
 
 
-@allure.feature('Регистрация')
-@allure.story('UI')
+@allure.feature('UI')
+@allure.story('Регистрация')
+@pytest.mark.xdist_group("group1")
 class TestRegistration:
     @allure.title('Не валидный submit password при регистрации')
     @Pages.open_login_page
@@ -33,8 +35,9 @@ class TestRegistration:
         login_page.log_in(fake_username, fake_password)
         assert login_page.is_history_block_visible()
 
-
-@allure.feature('Авторизация')
+@pytest.mark.xdist_group("group1")
+@allure.feature('UI')
+@allure.story('Авторизация')
 class TestAuth:
     @allure.title('Авторизация с валидными данными')
     @Pages.open_login_page
@@ -50,34 +53,37 @@ class TestAuth:
         login_page.btn_submit.click()
         assert login_page.is_error_message_visible()
 
+@pytest.mark.xdist_group("group1")
+@allure.feature('UI')
+@allure.story('Не валидная авторизация')
+class TestInvalidAuth:
+    @allure.title('Авторизация с неверным паролем')
+    @Pages.open_login_page
+    def test_invalid_password_auth(self, envs, login_page):
+        invalid_password = fake.password()
+        login_page.fill_user_creds(envs.test_username, invalid_password)
+        login_page.click_btn_submit()
+        assert login_page.is_error_message_visible()
 
-@allure.title('Авторизация с неверным паролем')
-@Pages.open_login_page
-def test_invalid_password_auth(envs, login_page):
-    invalid_password = fake.password()
-    login_page.fill_user_creds(envs.test_username, invalid_password)
-    login_page.click_btn_submit()
-    assert login_page.is_error_message_visible()
+    @allure.title('Авторизация с пустыми значениями для полей')
+    @Pages.open_login_page
+    def test_no_values_auth(self, envs, login_page):
+        login_page.click_btn_submit()
+        assert login_page.is_login_page_open(envs.login_url)
+
+@pytest.mark.xdist_group("group1")
+@allure.feature('UI')
+@allure.story('Выход из системы')
+class TestLogout:
+    @allure.title('Успешный выход из системы')
+    @Pages.open_main_page
+    def test_logout(self, envs, main_page):
+        main_page.logout(envs.login_url)
+        assert main_page.is_logged_out(envs.login_url)
 
 
-@allure.title('Авторизация с пустыми значениями для полей')
-@Pages.open_login_page
-def test_no_values_auth(envs, login_page):
-    login_page.click_btn_submit()
-    assert login_page.is_login_page_open(envs.login_url)
-
-
-@allure.story("Логаут")
-@allure.title('Успешный выход из системы')
-@Pages.open_main_page
-def test_logout(envs, main_page):
-    main_page.logout(envs.login_url)
-    assert main_page.is_logged_out(envs.login_url)
-
-
-@allure.story("Логаут")
-@allure.title("Отмена выхода из системы")
-@Pages.open_main_page
-def test_dont_logout(envs, main_page):
-    main_page.dont_logout()
-    assert main_page.dont_logged_out(envs.main_page_url)
+    @allure.title("Отмена выхода из системы")
+    @Pages.open_main_page
+    def test_dont_logout(self, envs, main_page):
+        main_page.dont_logout()
+        assert main_page.dont_logged_out(envs.main_page_url)
