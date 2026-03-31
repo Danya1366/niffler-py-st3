@@ -112,7 +112,6 @@ class MainPage(BasePage):
     def logout(self, login_url):
         self.menu_btn.click()
         expect(self.menu).to_be_visible()
-
         with self.page.expect_navigation(url=login_url):
             self.sign_out_btn.click()
             self.form_logout_btn.click()

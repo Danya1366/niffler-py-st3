@@ -1,5 +1,3 @@
-from locale import currency
-
 import allure
 
 from grpc_proto.internal.pb.niffler_currency_pb2 import CurrencyValues

@@ -8,6 +8,7 @@ from utils.datatime_util import get_past_date_iso
 
 @allure.feature('Таблица трат')
 @allure.story('API')
+@pytest.mark.xdist_group("group2")
 class TestSpendsApi:
     @allure.title('Создание траты через API')
     def test_add_spend_api(self, spends_client, envs, clean_categories, clean_spendings_setup):

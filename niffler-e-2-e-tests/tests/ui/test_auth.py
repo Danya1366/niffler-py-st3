@@ -1,4 +1,3 @@
-import pytest
 import allure
 
 from fixtures.pages_fixtures import main_page
@@ -10,7 +9,6 @@ fake = Faker()
 
 @allure.feature('UI')
 @allure.story('Регистрация')
-@pytest.mark.xdist_group("group1")
 class TestRegistration:
     @allure.title('Не валидный submit password при регистрации')
     @Pages.open_login_page
@@ -35,7 +33,8 @@ class TestRegistration:
         login_page.log_in(fake_username, fake_password)
         assert login_page.is_history_block_visible()
 
-@pytest.mark.xdist_group("group1")
+
+# @pytest.mark.xdist_group("group1")
 @allure.feature('UI')
 @allure.story('Авторизация')
 class TestAuth:
@@ -53,7 +52,8 @@ class TestAuth:
         login_page.btn_submit.click()
         assert login_page.is_error_message_visible()
 
-@pytest.mark.xdist_group("group1")
+
+# @pytest.mark.xdist_group("group1")
 @allure.feature('UI')
 @allure.story('Не валидная авторизация')
 class TestInvalidAuth:
@@ -71,7 +71,7 @@ class TestInvalidAuth:
         login_page.click_btn_submit()
         assert login_page.is_login_page_open(envs.login_url)
 
-@pytest.mark.xdist_group("group1")
+
 @allure.feature('UI')
 @allure.story('Выход из системы')
 class TestLogout:
@@ -80,7 +80,6 @@ class TestLogout:
     def test_logout(self, envs, main_page):
         main_page.logout(envs.login_url)
         assert main_page.is_logged_out(envs.login_url)
-
 
     @allure.title("Отмена выхода из системы")
     @Pages.open_main_page

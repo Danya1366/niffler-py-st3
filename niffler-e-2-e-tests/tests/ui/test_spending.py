@@ -1,10 +1,12 @@
 import allure
+import pytest
 
 from marks import Pages, TestData
 from models.enums import Constants, Spendings
 
 
 @allure.feature('Траты')
+@pytest.mark.xdist_group("group2")
 class TestSpends:
     @allure.title('Добавление новой траты за вчерашний день')
     @Pages.open_spending_page
@@ -76,6 +78,7 @@ class TestSpends:
 
 
 @allure.feature('Добавление траты по api')
+@pytest.mark.xdist_group("group2")
 class TestSpendApi:
     @allure.title('Добавляем новую трату по апи и удаляем через ui')
     @Pages.open_main_page

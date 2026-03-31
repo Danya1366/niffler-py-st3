@@ -1,13 +1,13 @@
 import allure
-from faker import Faker
 
+from faker import Faker
 from marks import Pages
 from models.enums import UserCreds
 
 fake = Faker("ru_RU")
 
 
-@allure.feature('Профиль пользователя')
+@allure.feature('UI')
 class TestProfile:
     @allure.story('Имя пользователя')
     @allure.title('Добавление имени для профиля пользователя')
@@ -41,7 +41,6 @@ class TestProfile:
 
         profile_page.add_new_category(category_name)
         assert profile_page.is_category_added(category_name)
-
 
     @allure.story('Категории UI')
     @allure.title('Архивация категории')

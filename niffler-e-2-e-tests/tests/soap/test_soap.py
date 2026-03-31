@@ -1,7 +1,8 @@
 import allure
+import pytest
+
 from faker import Faker
 from xmlschema import XMLSchemaChildrenValidationError
-
 from templates.read_templates import user_iso_soap_xml, xsd_response, update_user_data_xml
 from utils.soap import check_result_operation, check_result_update_operation
 

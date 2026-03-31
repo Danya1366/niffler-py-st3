@@ -1,10 +1,13 @@
 import allure
+import pytest
 
 from marks import TestData
 from models.enums import Constants
 
 
-@allure.feature('Категории')
+@allure.feature('API')
+@allure.story('Категории')
+@pytest.mark.xdist_group("group2")
 class TestCategories:
     @allure.title('Добавление категорий и проверка базы данных')
     @TestData.category(Constants.TEST_CATEGORY_BD)
