@@ -1,0 +1,16 @@
+{
+  "frontend_url": "http://frontend.niffler.dc",
+  "gateway_url": "http://gateway.niffler.dc:8090",
+  "auth_url": "http://auth.niffler.dc:9000",
+  "register_url": "http://frontend.niffler.dc/register",
+  "profile_url": "http://frontend.niffler.dc/profile",
+  "spending_url": "http://frontend.niffler.dc/spending",
+  "main_page_url": "http://frontend.niffler.dc/main",
+  "login_url": "http://auth.niffler.dc:9000/login",
+  "spend_db_url": "postgresql+psycopg2://postgres:secret@localhost:5432/niffler-spend",
+  "auth_db_url": "postgresql+psycopg2://postgres:secret@localhost:5432/niffler-auth",
+  "test_username": "qa_guru",
+  "test_password": "123321",
+  "kafka_address": "localhost:9093",
+  "soap_address": "http://localhost:8089/ws"
+}
