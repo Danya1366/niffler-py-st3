@@ -1,15 +1,15 @@
 import json
-
+import pytest
 import allure
 import requests
 
 from faker import Faker
-
-from conftest import kafka
+from fixtures.kafka_fixtures import kafka
 from models.user import UserName
-
 from allure import step
 
+
+@pytest.mark.xdist_group("group1")
 @allure.feature('Регистрация')
 @allure.story('KAFKA')
 class TestAuthRegistrationKafkaTest:

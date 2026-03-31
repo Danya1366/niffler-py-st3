@@ -10,6 +10,7 @@ class Category:
 @dataclass
 class Spendings:
     TEST_CATEGORY_1 = "категория 1"
+    TEST_CATEGORY_2 = "категория 2"
     description = "QA>GURU Python Advanced 6"
 
     TestDataSpend = {
@@ -17,6 +18,16 @@ class Spendings:
         "description": description,
         "category":
             {"name": TEST_CATEGORY_1
+             },
+        "spendDate": "2024-08-08T18:39:27.955Z",
+        "currency": "RUB"
+    }
+
+    TestDataSpend_1 = {
+        "amount": "108.51",
+        "description": description,
+        "category":
+            {"name": TEST_CATEGORY_2
              },
         "spendDate": "2024-08-08T18:39:27.955Z",
         "currency": "RUB"

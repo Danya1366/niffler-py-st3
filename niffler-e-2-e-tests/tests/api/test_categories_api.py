@@ -1,15 +1,15 @@
+import pytest
 import allure
 from models.category import CategorySQL
 from models.enums import Constants
 from utils.api_assertions import assertEqual, assertIsNotNone
 
-
+@pytest.mark.xdist_group("group2")
 @allure.feature('Категории')
 @allure.story('API')
 class TestCategoryApi:
     @allure.title('Создание категории через API')
     def test_add_category_api(self, spends_client, envs, clean_categories):
-
         added_category = spends_client.add_category(Constants.TEST_CATEGORY)
 
         assertEqual(added_category.name, Constants.TEST_CATEGORY,

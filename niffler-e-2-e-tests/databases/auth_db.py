@@ -1,11 +1,10 @@
+import allure
+
 import uuid
 from typing import Sequence
-
-import allure
 from allure_commons.types import AttachmentType
 from sqlalchemy import create_engine, Engine, event
 from sqlmodel import Session, select
-
 from models.config import Envs
 from models.user import UserSql
 

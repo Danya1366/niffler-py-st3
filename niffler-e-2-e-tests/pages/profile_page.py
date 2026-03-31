@@ -85,6 +85,7 @@ class ProfilePage(BasePage):
 
     @allure.step("Проверяем, что добавленное имя удалено")
     def is_profile_name_deleted(self) -> bool:
+        self.wait_for_load()
         return self.name_input.input_value() == ""
 
     @allure.step('Заархивировать категорию')

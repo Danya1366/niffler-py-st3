@@ -1,10 +1,13 @@
 import allure
+import pytest
 
 from marks import Pages, TestData
 from models.enums import Constants, Spendings
 
 
 @allure.feature('Траты')
+@allure.story('API + UI')
+@pytest.mark.xdist_group("group2")
 class TestSpends:
     @allure.title('Добавление новой траты за вчерашний день')
     @Pages.open_spending_page
@@ -73,3 +76,17 @@ class TestSpends:
             Constants.amount1,
             Constants.amount2
         )
+
+
+@allure.feature('Добавление траты по api')
+@allure.story('API + UI')
+@pytest.mark.xdist_group("group2")
+class TestSpendApi:
+    @allure.title('Добавляем новую трату по апи и удаляем через ui')
+    @Pages.open_main_page
+    @TestData.category(Spendings.TEST_CATEGORY_2)
+    @TestData.spends(Spendings.TestDataSpend_1)
+    def test_spending_should_be_deleted(self, category, spends, main_page):
+        assert main_page.is_description_in_table(Spendings.description)
+        main_page.delete_spend(Spendings.TEST_CATEGORY_2)
+        assert main_page.is_description_absent_in_table(Spendings.description)

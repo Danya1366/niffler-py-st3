@@ -35,6 +35,7 @@ class TestRegistration:
 
 
 @allure.feature('Авторизация')
+@allure.story('UI')
 class TestAuth:
     @allure.title('Авторизация с валидными данными')
     @Pages.open_login_page
@@ -51,33 +52,35 @@ class TestAuth:
         assert login_page.is_error_message_visible()
 
 
-@allure.title('Авторизация с неверным паролем')
-@Pages.open_login_page
-def test_invalid_password_auth(envs, login_page):
-    invalid_password = fake.password()
-    login_page.fill_user_creds(envs.test_username, invalid_password)
-    login_page.click_btn_submit()
-    assert login_page.is_error_message_visible()
+@allure.feature('Не валидная авторизация')
+@allure.story('UI')
+class TestInvalidAuth:
+    @allure.title('Авторизация с неверным паролем')
+    @Pages.open_login_page
+    def test_invalid_password_auth(self, envs, login_page):
+        invalid_password = fake.password()
+        login_page.fill_user_creds(envs.test_username, invalid_password)
+        login_page.click_btn_submit()
+        assert login_page.is_error_message_visible()
+
+    @allure.title('Авторизация с пустыми значениями для полей')
+    @Pages.open_login_page
+    def test_no_values_auth(self, envs, login_page):
+        login_page.click_btn_submit()
+        assert login_page.is_login_page_open(envs.login_url)
 
 
-@allure.title('Авторизация с пустыми значениями для полей')
-@Pages.open_login_page
-def test_no_values_auth(envs, login_page):
-    login_page.click_btn_submit()
-    assert login_page.is_login_page_open(envs.login_url)
+@allure.feature('Выход из системы')
+@allure.story('UI')
+class TestLogout:
+    @allure.title('Успешный выход из системы')
+    @Pages.open_main_page
+    def test_logout(self, envs, main_page):
+        main_page.logout(envs.login_url)
+        assert main_page.is_logged_out(envs.login_url)
 
-
-@allure.story("Логаут")
-@allure.title('Успешный выход из системы')
-@Pages.open_main_page
-def test_logout(envs, main_page):
-    main_page.logout(envs.login_url)
-    assert main_page.is_logged_out(envs.login_url)
-
-
-@allure.story("Логаут")
-@allure.title("Отмена выхода из системы")
-@Pages.open_main_page
-def test_dont_logout(envs, main_page):
-    main_page.dont_logout()
-    assert main_page.dont_logged_out(envs.main_page_url)
+    @allure.title("Отмена выхода из системы")
+    @Pages.open_main_page
+    def test_dont_logout(self, envs, main_page):
+        main_page.dont_logout()
+        assert main_page.dont_logged_out(envs.main_page_url)

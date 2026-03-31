@@ -5,7 +5,7 @@ from models.spend import SpendEdit
 from utils.api_assertions import assertEqual, assertNotIn
 from utils.datatime_util import get_past_date_iso
 
-
+@pytest.mark.xdist_group("group2")
 @allure.feature('Таблица трат')
 @allure.story('API')
 class TestSpendsApi:
