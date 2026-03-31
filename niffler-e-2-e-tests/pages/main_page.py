@@ -58,7 +58,7 @@ class MainPage(BasePage):
 
     @allure.step('Проверяем статистику трат')
     def is_statistics_correct(self, category: str, amount: str) -> bool:
-        self.page.wait_for_load_state("domcontentloaded")
+        self.wait_for_load()
         self.statistics_container.wait_for(state="visible", timeout=10000)
         return f"{category} {amount}" in self.statistics_container.text_content()
 
