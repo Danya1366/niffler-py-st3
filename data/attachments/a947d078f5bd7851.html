@@ -1,0 +1,80 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset = UTF-8">
+    <script src="https://yastatic.net/jquery/2.2.3/jquery.min.js" crossorigin="anonymous"></script>
+
+    <link href="https://yastatic.net/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="https://yastatic.net/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <link type="text/css" href="https://yandex.st/highlightjs/8.0/styles/github.min.css" rel="stylesheet"/>
+    <script type="text/javascript" src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+    <script type="text/javascript" src="https://yandex.st/highlightjs/8.0/languages/bash.min.js"></script>
+    <script type="text/javascript" src="https://yandex.st/highlightjs/8.0/languages/json.min.js"></script>
+    <script type="text/javascript" src="https://yandex.st/highlightjs/8.0/languages/xml.min.js"></script>
+    <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+
+    <style>
+        pre {
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <pre><code>POST to http://gateway.niffler.dc:8090/api/spends/add</code></pre>
+</div>
+
+
+    <h4>Body</h4>
+    <div>
+        <pre><code>b'{"amount": 1000.5, "description": "\\u0422\\u0440\\u0430\\u0442\\u0430 \\u0432 \\u0440\\u0443\\u0431\\u043b\\u044f\\u0445", "category": {"name": "school"}, "spendDate": "2026-03-30T20:38:02.111161Z", "currency": "RUB"}'</code></pre>
+    </div>
+
+
+
+
+    <h4>Headers</h4>
+    <div>
+    
+        <div>
+            <pre><code><b>User-Agent</b>: python-requests/2.32.5</code></pre>
+        </div>
+    
+        <div>
+            <pre><code><b>Accept-Encoding</b>: gzip, deflate</code></pre>
+        </div>
+    
+        <div>
+            <pre><code><b>Accept</b>: application/json</code></pre>
+        </div>
+    
+        <div>
+            <pre><code><b>Connection</b>: keep-alive</code></pre>
+        </div>
+    
+        <div>
+            <pre><code><b>Authorization</b>: Bearer eyJraWQiOiJjMzAyNzEyNC1kOTdjLTQ1MTMtOTc0MC05MzIyYzU3MGExZjkiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJxYV9ndXJ1IiwiYXVkIjoiY2xpZW50IiwibmJmIjoxNzc1NTA3ODgwLCJzY29wZSI6WyJvcGVuaWQiXSwiaXNzIjoiaHR0cDovL2F1dGgubmlmZmxlci5kYzo5MDAwIiwiZXhwIjoxNzc1NTExNDgwLCJpYXQiOjE3NzU1MDc4ODAsImp0aSI6Ijc1NTQ2NmY1LThkY2EtNGEzMS1hNGZjLWQwMDk3OTVhMDBkMSJ9.iVC96lEooLVR_MulpFiLPhc9qZT1yfNSNImNJjGpQalS6sLOYE1c8zo5l20VxwxTKV3PvdhHnvDN06tX9jHTFZv9PuDy2nxNPFj6isNWRbVle1GWjyg3zKzyk9gP3xDQE_WqHtkMtUJFRm4VRiGFOWPp4hSCJgREPFnMxivw-L_QKQQd4TXpLAH5Q-OWDhsIYEJ9c_cDq0g-IVITqF5hJfjJLzzyDBOygw7xivN1k21AhN1zYR5qa3gVYrqlTOXLddasoVmJfYdn72WbUEpmPa_KWtvuvFyMVMvnmUE7m7lwquUC1SlS7cxfT54yZT4H6UcMVOqWCwOI3ck42vTHPg</code></pre>
+        </div>
+    
+        <div>
+            <pre><code><b>Content-Type</b>: application/json</code></pre>
+        </div>
+    
+        <div>
+            <pre><code><b>Content-Length</b>: 206</code></pre>
+        </div>
+    
+    </div>
+
+
+
+
+
+
+    <h4>Curl</h4>
+    <div>
+        <pre><code>curl -H 'User-Agent: python-requests/2.32.5' -H 'Accept-Encoding: gzip, deflate' -H 'Accept: application/json' -H 'Connection: keep-alive' -H 'Authorization: Bearer eyJraWQiOiJjMzAyNzEyNC1kOTdjLTQ1MTMtOTc0MC05MzIyYzU3MGExZjkiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJxYV9ndXJ1IiwiYXVkIjoiY2xpZW50IiwibmJmIjoxNzc1NTA3ODgwLCJzY29wZSI6WyJvcGVuaWQiXSwiaXNzIjoiaHR0cDovL2F1dGgubmlmZmxlci5kYzo5MDAwIiwiZXhwIjoxNzc1NTExNDgwLCJpYXQiOjE3NzU1MDc4ODAsImp0aSI6Ijc1NTQ2NmY1LThkY2EtNGEzMS1hNGZjLWQwMDk3OTVhMDBkMSJ9.iVC96lEooLVR_MulpFiLPhc9qZT1yfNSNImNJjGpQalS6sLOYE1c8zo5l20VxwxTKV3PvdhHnvDN06tX9jHTFZv9PuDy2nxNPFj6isNWRbVle1GWjyg3zKzyk9gP3xDQE_WqHtkMtUJFRm4VRiGFOWPp4hSCJgREPFnMxivw-L_QKQQd4TXpLAH5Q-OWDhsIYEJ9c_cDq0g-IVITqF5hJfjJLzzyDBOygw7xivN1k21AhN1zYR5qa3gVYrqlTOXLddasoVmJfYdn72WbUEpmPa_KWtvuvFyMVMvnmUE7m7lwquUC1SlS7cxfT54yZT4H6UcMVOqWCwOI3ck42vTHPg' -H 'Content-Type: application/json' -H 'Content-Length: 206' -d '{"amount": 1000.5, "description": "\u0422\u0440\u0430\u0442\u0430 \u0432 \u0440\u0443\u0431\u043b\u044f\u0445", "category": {"name": "school"}, "spendDate": "2026-03-30T20:38:02.111161Z", "currency": "RUB"}' http://gateway.niffler.dc:8090/api/spends/add</code></pre>
+    </div>
+
+</body>
+</html>
