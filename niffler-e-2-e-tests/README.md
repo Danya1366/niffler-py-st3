@@ -2,17 +2,17 @@
 ### Скриншоты страниц (обьекта тестирования) 
 #### Страница авторизации
 <p align="center">
-  <img src="images/login_started_page.png" alt="Login Page" width="600">
+  <img src="images/ScreenShots/login_started_page.png" alt="Login Page" width="600">
 </p>
 
 #### Главная страница
 <p align="center">
-  <img src="images/main_page.png" alt="Main Page" width="600">
+  <img src="images/ScreenShots/main_page.png" alt="Main Page" width="600">
 </p>
 
 #### Страница профиля
 <p align="center">
-  <img src="images/profile_page.png" alt="Profile Page" width="600">
+  <img src="images/ScreenShots/profile_page.png" alt="Profile Page" width="600">
 </p>
 
 ---
@@ -25,7 +25,7 @@
 <table>
   <tr>
     <td align="center">
-      <img src="images/icons/Python.svg" width="50"><br>
+      <img src="images/icons/Python.png" width="50"><br>
       <b>Python</b>
     </td>
     <td align="center">
@@ -41,38 +41,34 @@
       <b>Requests</b>
     </td>
     <td align="center">
-      <img src="images/icons/Allure.svg" width="50"><br>
+      <img src="images/icons/allure.png" width="50"><br>
       <b>Allure</b>
     </td>
     <td align="center">
-      <img src="images/icons/gRPC.svg" width="50"><br>
-      <b>gRPC (plan)</b>
+      <img src="images/icons/grpc.png" width="50"><br>
+      <b>gRPC</b>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="images/icons/Kafka.svg" width="50"><br>
+      <img src="images/icons/kafka.svg" width="50"><br>
       <b>Kafka</b>
     </td>
     <td align="center">
-      <img src="images/icons/SOAP.svg" width="50"><br>
+      <img src="images/icons/soap.png" width="80"><br>
       <b>SOAP</b>
     </td>
     <td align="center">
-      <img src="images/icons/GraphQL.svg" width="50"><br>
-      <b>GraphQL (plan)</b>
-    </td>
-    <td align="center">
-      <img src="images/icons/PostgreSQL.svg" width="50"><br>
-      <b>Postgres</b>
+      <img src="images/icons/PostgresSQL.svg" width="50"><br>
+      <b>PostgresSQL</b>
     </td>
     <td align="center">
       <img src="images/icons/Docker.svg" width="50"><br>
       <b>Docker</b>
     </td>
     <td align="center">
-      <img src="images/icons/GitHub Actions.svg" width="50"><br>
-      <b>GitHub Actions</b>
+      <img src="images/icons/github.png" width="50"><br>
+      <b>GitHub</b>
     </td>
   </tr>
 </table>
@@ -184,6 +180,9 @@ poetry run pytest -n 2 --dist loadgroup --alluredir=allure-results --clean-allur
 ```bash
 allure serve allure-results
 ```
+<p align="center">
+  <img src="images/ScreenShots/Allure Report.png" alt="Profile Page" width="600">
+</p>
 
 ## ⚡ Тестирование с mock gRPC-сервером валют
 

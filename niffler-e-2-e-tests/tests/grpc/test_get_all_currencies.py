@@ -5,7 +5,7 @@ from grpc_proto.internal.pb.niffler_currency_pb2_pbreflect import NifflerCurrenc
 from google.protobuf import empty_pb2
 
 
-@allure.feature('Перевод валюты')
+@allure.feature('Обмен валюты')
 @allure.story('GRPC')
 class TestGrpcAllCurrencies:
     @allure.title('Получение всех доступных валют')

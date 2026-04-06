@@ -78,7 +78,7 @@ class TestSpends:
         )
 
 
-@allure.feature('Добавление траты по api')
+@allure.feature('Траты')
 @allure.story('API + UI')
 @pytest.mark.xdist_group("group2")
 class TestSpendApi:
