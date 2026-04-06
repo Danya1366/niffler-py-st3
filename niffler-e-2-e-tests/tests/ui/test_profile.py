@@ -7,7 +7,7 @@ from models.enums import UserCreds
 fake = Faker("ru_RU")
 
 
-@allure.feature('Имя пользователя')
+@allure.feature('Профиль пользователя')
 @allure.story('UI')
 class TestProfile:
     @allure.title('Добавление имени для профиля пользователя')
@@ -31,7 +31,7 @@ class TestProfile:
         profile_page.add_name_in_profile(UserCreds.edited_name)
         assert profile_page.is_allert_visible
 
-@allure.feature('Категории пользователя')
+@allure.feature('Категории')
 @allure.story('UI')
 class TestUserCategory:
     @allure.title('Добавление категории')

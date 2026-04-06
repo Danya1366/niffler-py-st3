@@ -5,7 +5,7 @@ from grpc import insecure_channel
 from grpc_proto.grpc.interceptors.allure import AllureInterceptor
 from grpc_proto.grpc.interceptors.logging import LoggingInterceptor
 from grpc_proto.internal.pb.niffler_currency_pb2_pbreflect import NifflerCurrencyServiceClient
-from settings.settings import Settings
+from config.settings import Settings
 
 INTERCEPTORS = [
     LoggingInterceptor(),

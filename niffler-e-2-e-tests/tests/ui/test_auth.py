@@ -52,7 +52,7 @@ class TestAuth:
         assert login_page.is_error_message_visible()
 
 
-@allure.feature('Не валидная авторизация')
+@allure.feature('Авторизация')
 @allure.story('UI')
 class TestInvalidAuth:
     @allure.title('Авторизация с неверным паролем')

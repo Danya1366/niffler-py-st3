@@ -7,8 +7,9 @@ from utils.soap import check_result_operation, check_result_update_operation
 
 fake = Faker("ru_RU")
 
+
 @allure.feature('Профиль пользователя')
-@allure.feature('SOAP')
+@allure.story('SOAP')
 class TestSoap:
     @allure.title('Получение информации о пользователе')
     def test_niffler(self, soap_session):
